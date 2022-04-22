@@ -63,7 +63,11 @@ function Login() {
               </div>
             </div>
             <div className="field">
-              <button type="submit" className="button is-fullwidth is-info">
+              <button
+                href="/login"
+                type="submit"
+                className="button is-fullwidth is-info"
+              >
                 Log Me In!
               </button>
             </div>

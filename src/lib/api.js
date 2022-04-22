@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://ga-cheesebored.herokuapp.com';
+const baseUrl = 'http://localhost:8000';
 
 export const getAllCheeses = () => {
   return axios.get(`${baseUrl}/cheeses`);
@@ -11,15 +11,17 @@ export const getSingleCheese = (id) => {
 };
 
 export const registerUser = (user) => {
-  return axios.post(`${baseUrl}/register`, user)
-}
+  return axios.post(`${baseUrl}/authentication/register/`, user);
+};
 
 export const loginUser = (user) => {
-  return axios.post(`${baseUrl}/login`, user)
-}
+  return axios.post(`${baseUrl}/authentication/login/`, user);
+  //   headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+  // });
+};
 
 export const createCheese = (cheese) => {
   return axios.post(`${baseUrl}/cheeses`, cheese, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } 
-  })
-}
+    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+  });
+};

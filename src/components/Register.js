@@ -9,7 +9,8 @@ function Register() {
     username: '',
     email: '',
     password: '',
-    passwordConfirmation: '',
+    password_confirmation: '',
+    image: '',
   });
 
   function handleChange(event) {
@@ -82,9 +83,21 @@ function Register() {
                   type="password"
                   className="input"
                   placeholder="Password Confirmation"
-                  name="passwordConfirmation"
+                  name="password_confirmation"
                   onChange={handleChange}
-                  value={user.passwordConfirmation}
+                  value={user.password_confirmation}
+                />
+              </div>
+            </div>
+            <div className="field">
+              <label className="label">Emoji </label>
+              <div className="control">
+                <input
+                  className="input"
+                  placeholder="🐸"
+                  name="image"
+                  onChange={handleChange}
+                  value={user.image}
                 />
               </div>
             </div>

@@ -32,6 +32,7 @@
     "babel": "^6.23.0",
     "bulma": "^0.9.3",
     "dotenv": "^16.0.0",
+    "genius-lyrics-api": "^3.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.2"
