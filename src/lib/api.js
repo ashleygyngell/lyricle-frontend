@@ -34,7 +34,9 @@ export const getLoggedInUserId = (user) => {
 };
 
 export const getUserById = () => {
+  const accessToken = localStorage.getItem('accessToken');
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
+  if (!accessToken) return false;
   return axios.get(`${baseUrl}/authentication/credentials/`, {
     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
   });

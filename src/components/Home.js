@@ -1,4 +1,5 @@
 import React from 'react';
+import lyricleLogo from '../assets/images/lyriclelogo.png';
 
 // import { getLyrics, getSong } from 'genius-lyrics-api';
 
@@ -31,11 +32,18 @@ const Home = () => {
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="hero-body">
         <div className="container">
-          <p className="title has-text-centered">
+          <div className="title has-text-centered">
+            <img
+              className="logo transform"
+              src={lyricleLogo}
+              alt="Small Lyricle Logo"
+              width="90"
+              height="300"
+            />
             <a href="/play">
-              <span>TODAYS LYRICLE</span>
+              <p>Play Todays Lyricle </p>
             </a>
-          </p>
+          </div>
         </div>
       </div>
     </section>

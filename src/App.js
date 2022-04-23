@@ -6,6 +6,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Play from './components/Play';
 import UserProfile from './components/UserProfile';
+
 function App() {
   return (
     <BrowserRouter>

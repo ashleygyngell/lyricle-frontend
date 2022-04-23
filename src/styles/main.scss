@@ -4,3 +4,39 @@ $success: $forestgreen;
 $info: $outdoorsgreen;
 
 @import '~bulma/bulma.sass';
+
+.sample {
+  box-sizing: border-box;
+  display: block;
+  font: 17px/1.5 'Noto Sans JP', sans-serif;
+  width: 300px;
+  min-height: 250px;
+  max-height: '';
+  padding: 15px;
+  overflow: hidden;
+  outline: none;
+  resize: none;
+}
+
+body {
+  background-color: #fcfcfc;
+}
+
+
+
+.input-res {
+   
+ 
+  font: 15px/1 'Open Sans', sans-serif;
+  color: #333;
+  width: 100%;
+  max-width: 500px;
+  background-color: grey;
+  border: none;
+  padding: 10px 11px 11px 11px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: 0;
+  box-sizing: border-box;
+}

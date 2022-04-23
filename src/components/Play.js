@@ -37,10 +37,26 @@ const Home = () => {
     getData();
   }, []);
 
+  // const sampleTextarea = document.querySelector('.sample');
+  // sampleTextarea.addEventListener('input', () => {
+  //   sampleTextarea.style.height = '20px';
+  //   sampleTextarea.style.height = sampleTextarea.scrollHeight + 'px';
+  // });
+
   return (
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="hero-body">
         <div className="container">
+          <input type="text" className="input-res" />
+
+          <input type="text" className="input-res" />
+
+          <input type="text" className="input-res" />
+
+          <input type="text" className="input-res" />
+
+          <input type="text" className="input-res" />
+
           <p className="title has-text-centered">PLAY</p>
           <button onClick={click}>Click for Song Lyrics</button>
           <div>
