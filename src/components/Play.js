@@ -4,13 +4,42 @@ import { getKendrick } from '../lib/geniusapi';
 
 const options = {
   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'HUMBLE',
-  artist: 'Kendrik Lamar',
+  title: 'lion sleeps',
+  artist: 'the tokens',
   optimizeQuery: true,
 };
 
 function click() {
-  getLyrics(options).then((lyrics) => console.log(lyrics));
+  const trunc = (s) => s.split(/[.?!]/)[0].split(' ').slice(0, 10).join(' ');
+  getLyrics(options).then((lyrics) => {
+    const lyricsString = lyrics;
+
+    if (lyricsString.includes('Verse 1')) {
+      console.log(
+        'THISISFIRST8WORDSOFVERSE1',
+        trunc(lyricsString.substring(lyricsString.indexOf('Verse 1') + 8))
+      );
+    } else {
+      console.log('doesnt');
+    }
+    if (lyricsString.includes('Verse 2')) {
+      console.log(
+        'THISISFIRST8WORDSOFVERSE2',
+        trunc(lyricsString.substring(lyricsString.indexOf('Verse 2') + 8))
+      );
+    } else {
+      console.log('doesnt');
+    }
+    if (lyricsString.includes('Verse 3')) {
+      console.log(
+        'THISISFIRST8WORDSOFVERSE3',
+        trunc(lyricsString.substring(lyricsString.indexOf('Verse 3') + 8))
+      );
+    } else {
+      console.log('doesnt have a verse 3');
+    }
+  });
+
   // getSong(options).then((song) =>
   //   console.log(`
   // ${song.id}
@@ -37,11 +66,38 @@ const Home = () => {
     getData();
   }, []);
 
-  // const sampleTextarea = document.querySelector('.sample');
-  // sampleTextarea.addEventListener('input', () => {
-  //   sampleTextarea.style.height = '20px';
-  //   sampleTextarea.style.height = sampleTextarea.scrollHeight + 'px';
-  // });
+  const [guess, setGuess] = React.useState('hi');
+
+  const btn = document.querySelectorAll('#keyboard button');
+
+  btn.forEach(function (elm) {
+    elm.addEventListener('click', function () {
+      const r = document.querySelector(['active']);
+      const l = elm.dataset.key;
+      console.log(l);
+      setGuess([guess].append(l));
+
+      if (l === '←') {
+        if (Number(r.dataset.length) > 0) {
+          r.querySelectorAll('.letter')[r.dataset.length].dataset.letter = '';
+          r.querySelectorAll('.letter')[r.dataset.length].innerText = '';
+        }
+      } else if (l === '↵') {
+        //   if (Number(r.dataset.length) === 0) {
+
+        //     console.log('noguess')
+        //   }
+        // } else {
+        //   if (Number(r.dataset.length) < 5) {
+        //     r.dataset.word = r.dataset.word + l;
+        //     r.querySelectorAll('.letter')[r.dataset.length].dataset.letter = l;
+        //     r.querySelectorAll('.letter')[r.dataset.length].innerText = l;
+        //     r.dataset.length = Number(r.dataset.length) + 1;
+        //   }
+        console.log('hit enter');
+      }
+    });
+  });
 
   return (
     <section className="hero is-fullheight-with-navbar is-success">
@@ -52,11 +108,16 @@ const Home = () => {
               type="text"
               className="clue_field has-text-centered is-half"
             />
+            <input
+              type="text hidden"
+              className="clue_field has-text-centered"
+            />
             <input type="text" className="clue_field has-text-centered" />
             <input type="text" className="clue_field has-text-centered" />
             <input type="text" className="clue_field has-text-centered" />
-            <input type="text" className="clue_field has-text-centered" />
-            <input type="text" className="guess_field has-text-centered" />
+            <textarea className="guess_field has-text-centered">
+              {guess}
+            </textarea>
           </div>
 
           <div id="keyboard">
