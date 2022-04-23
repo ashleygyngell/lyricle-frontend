@@ -4,22 +4,20 @@ import { getKendrick } from '../lib/geniusapi';
 
 const options = {
   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'Blinding Lights',
-  artist: 'The Weeknd',
-  album: 'After Hours',
+  title: 'HUMBLE',
+  artist: 'Kendrik Lamar',
   optimizeQuery: true,
 };
 
 function click() {
   getLyrics(options).then((lyrics) => console.log(lyrics));
-  getSong(options).then((song) =>
-    console.log(`
-	${song.id}
-	${song.title}
-	${song.url}
-	${song.albumArt}
-	${song.lyrics}`)
-  );
+  // getSong(options).then((song) =>
+  //   console.log(`
+  // ${song.id}
+  // ${song.title}
+  // ${song.albumArt}
+  // ${song.lyrics}`)
+  // );
 }
 
 // const KendrickStats = () => {};
@@ -32,13 +30,13 @@ const Home = () => {
       try {
         const { data } = await getKendrick();
         setkendrikinfo(data.response.hits);
-        console.log(data.response.hits);
       } catch (err) {
         console.error(err);
       }
     };
     getData();
   }, []);
+
   return (
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="hero-body">
@@ -53,7 +51,9 @@ const Home = () => {
             ) : (
               console.log(
                 'TEST',
-                kendrikinfo.map((x) => x.result.full_title)
+                kendrikinfo.map((x) => x.result.full_title),
+                console.log('TEST2', kendrikinfo[0].result.title),
+                console.log('TEST3', kendrikinfo[0].result.artist_names)
               )
             )}
           </div>

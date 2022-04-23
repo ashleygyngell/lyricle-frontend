@@ -8,13 +8,16 @@ const Navbar = () => {
         <div className="container">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item">
-              Home
+              <i className="fa-solid fa-house-chimney"></i>
             </Link>
             <Link to="/register" className="navbar-item">
               Register
             </Link>
             <Link to="/login" className="navbar-item">
               Login
+            </Link>
+            <Link to="/userprofile" className="navbar-item">
+              <i className="fa-solid fa-user"></i>
             </Link>
           </div>
         </div>

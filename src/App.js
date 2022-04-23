@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Register from './components/Register';
 import Login from './components/Login';
 import Play from './components/Play';
+import UserProfile from './components/UserProfile';
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/play" element={<Play />} />
+        <Route path="/userprofile" element={<UserProfile />} />
       </Routes>
     </BrowserRouter>
   );

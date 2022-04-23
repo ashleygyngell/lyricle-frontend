@@ -32,73 +32,88 @@ function Register() {
   }
 
   return (
-    <section className="section has-background-success">
-      <div className="container">
-        <div className="columns">
+    <section className="hero is-fullheight-with-navbar is-success">
+      <div className="section has-background-success">
+        <div className="container">
           <form
             className="column is-half is-offset-one-quarter box"
             onSubmit={handleSubmit}
           >
             <div className="field">
               <label className="label">Username</label>
-              <div className="control">
+              <div className="control has-icons-left">
                 <input
                   className="input"
-                  placeholder="Username"
+                  placeholder="example"
                   name="username"
                   onChange={handleChange}
                   value={user.username}
                 />
+                <span className="icon is-left">
+                  <i className="fas fa-user"></i>
+                </span>
               </div>
             </div>
             <div className="field">
               <label className="label">Email</label>
-              <div className="control">
+              <div className="control has-icons-left">
                 <input
                   className="input"
-                  placeholder="Email"
+                  placeholder="example@example.com"
                   name="email"
                   onChange={handleChange}
                   value={user.email}
                 />
+                <span className="icon is-left">
+                  <i className="fas fa-envelope"></i>
+                </span>
               </div>
             </div>
             <div className="field">
               <label className="label">Password</label>
-              <div className="control">
+              <div className="control has-icons-left">
                 <input
                   type="password"
                   className="input"
-                  placeholder="Password"
+                  placeholder=""
                   name="password"
                   onChange={handleChange}
                   value={user.password}
                 />
+                <span className="icon is-left">
+                  <i className="fas fa-lock"></i>
+                </span>
               </div>
             </div>
             <div className="field">
               <label className="label">Password Confirmation</label>
-              <div className="control">
+              <div className="control has-icons-left">
                 <input
                   type="password"
                   className="input"
-                  placeholder="Password Confirmation"
+                  placeholder=""
                   name="password_confirmation"
                   onChange={handleChange}
                   value={user.password_confirmation}
                 />
+                <span className="icon is-left">
+                  <i className="fas fa-lock"></i>
+                </span>
               </div>
             </div>
             <div className="field">
               <label className="label">Emoji </label>
-              <div className="control">
+              <div className="control has-icons-left">
                 <input
                   className="input"
-                  placeholder="🐸"
+                  placeholder=""
                   name="image"
                   onChange={handleChange}
                   value={user.image}
                 />
+                <span className="icon is-left">
+                  <i className="fas fa-horse-head"></i>
+                </span>
               </div>
             </div>
             <div className="field">
