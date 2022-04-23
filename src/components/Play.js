@@ -47,18 +47,122 @@ const Home = () => {
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="hero-body">
         <div className="container">
-          <input type="text" className="input-res" />
+          <div className="columns is-mobile is-multiline is-centered">
+            <input
+              type="text"
+              className="clue_field has-text-centered is-half"
+            />
+            <input type="text" className="clue_field has-text-centered" />
+            <input type="text" className="clue_field has-text-centered" />
+            <input type="text" className="clue_field has-text-centered" />
+            <input type="text" className="clue_field has-text-centered" />
+            <input type="text" className="guess_field has-text-centered" />
+          </div>
 
-          <input type="text" className="input-res" />
+          <div id="keyboard">
+            <div className="row">
+              <button data-key="q" className="">
+                q
+              </button>
+              <button data-key="w" className="">
+                w
+              </button>
+              <button data-key="e" className="">
+                e
+              </button>
+              <button data-key="r" className="">
+                r
+              </button>
+              <button data-key="t" className="">
+                t
+              </button>
+              <button data-key="y" className="">
+                y
+              </button>
+              <button data-key="u" className="">
+                u
+              </button>
+              <button data-key="i" className="">
+                i
+              </button>
+              <button data-key="o" className="">
+                o
+              </button>
+              <button data-key="p" className="">
+                p
+              </button>
+            </div>
+            <div className="row">
+              <div className="spacer half"></div>
+              <button data-key="a" className="">
+                a
+              </button>
+              <button data-key="s" className="">
+                s
+              </button>
+              <button data-key="d" className="">
+                d
+              </button>
+              <button data-key="f" className="">
+                f
+              </button>
+              <button data-key="g" className="">
+                g
+              </button>
+              <button data-key="h" className="">
+                h
+              </button>
+              <button data-key="j" className="">
+                j
+              </button>
+              <button data-key="k" className="">
+                k
+              </button>
+              <button data-key="l" className="">
+                l
+              </button>
+              <div className="spacer half"></div>
+            </div>
+            <div className="row">
+              <button data-key="←" className="one-and-a-half">
+                <i className="fas fa-backspace"></i>
+              </button>
+              <button data-key="z" className="">
+                z
+              </button>
+              <button data-key="x" className="">
+                x
+              </button>
+              <button data-key="c" className="">
+                c
+              </button>
+              <button data-key="v" className="">
+                v
+              </button>
+              <button data-key="b" className="">
+                b
+              </button>
+              <button data-key="n" className="">
+                n
+              </button>
+              <button data-key="m" className="">
+                m
+              </button>
+              <button data-key="↵" className="submit">
+                Enter
+              </button>
+            </div>
+            <div className="row">
+              <button data-key=" " className="">
+                {' '}
+                Space{' '}
+              </button>
+            </div>
+            <br />
 
-          <input type="text" className="input-res" />
+            <button onClick={click}>Click for Song Lyrics</button>
+          </div>
 
-          <input type="text" className="input-res" />
-
-          <input type="text" className="input-res" />
-
-          <p className="title has-text-centered">PLAY</p>
-          <button onClick={click}>Click for Song Lyrics</button>
           <div>
             {!kendrikinfo ? (
               <div className="pageloader ">

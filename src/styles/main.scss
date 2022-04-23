@@ -22,21 +22,87 @@ body {
   background-color: #fcfcfc;
 }
 
-
-
-.input-res {
-   
- 
-  font: 15px/1 'Open Sans', sans-serif;
-  color: #333;
+.clue_field {
+  font-size: 3.5vw;
+  color: white;
   width: 100%;
-  max-width: 500px;
+  max-width: 90vw;
+  height: 3vh;
   background-color: grey;
   border: none;
-  padding: 10px 11px 11px 11px;
+  padding: 20px;
   border-radius: 3px;
   box-shadow: none;
   outline: none;
-  margin: 0;
+  margin: 10px;
   box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+.guess_field {
+  font-size: 3.5vw;
+  color: white;
+  width: 100%;
+  max-width: 70vw;
+  height: 3vh;
+  background-color: darkgrey;
+  border: none;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: 20px;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+
+#keyboard {
+  margin: 0 8px;
+
+  user-select: none;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  margin: 0 auto 8px;
+  touch-action: manipulation;
+}
+
+button {
+  font-family: inherit;
+  font-weight: bold;
+  border: 0;
+  padding: 0;
+  margin: 0 6px 0 0;
+  height: 45px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: darkgray;
+  color: white;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+  background-color: rgb(234, 32, 136);
+}
+
+.one-and-a-half {
+  flex: 1.5;
+  font-size: 12px;
+}
+
+.submit {
+  flex: 1.5;
+  font-size: 12px;
+  background-color: rgb(234, 32, 136);
 }
