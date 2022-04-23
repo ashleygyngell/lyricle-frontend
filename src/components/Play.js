@@ -149,7 +149,7 @@ const Home = () => {
                 m
               </button>
               <button data-key="↵" className="submit">
-                Enter
+                Submit
               </button>
             </div>
             <div className="row">

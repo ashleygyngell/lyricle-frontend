@@ -53,7 +53,9 @@ const Navbar = () => {
         </a>
       </div>
 
-      <div className={openBurger ? 'navbar-menu is-active' : 'navbar-menu'}>
+      <div
+        className={openBurger ? 'navbar is-success is-active ' : 'navbar-menu '}
+      >
         <div className="navbar-end">
           {getUserById() && (
             <Link to={'/leagues'} className="navbar-item">

@@ -1,6 +1,6 @@
 import React from 'react';
 import lyricleLogo from '../assets/images/lyriclelogo.png';
-
+import { getUserById } from '../lib/api.js';
 // import { getLyrics, getSong } from 'genius-lyrics-api';
 
 // const options = {
@@ -33,6 +33,15 @@ const Home = () => {
       <div className="hero-body">
         <div className="container">
           <div className="title has-text-centered">
+            {getUserById() ? (
+              ''
+            ) : (
+              <a href="/register">
+                <p>Sign Up To Compete With Your Friends</p>
+              </a>
+            )}
+
+            <br />
             <img
               className="logo transform"
               src={lyricleLogo}

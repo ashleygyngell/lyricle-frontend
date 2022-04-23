@@ -96,6 +96,11 @@ button:hover {
   background-color: rgb(234, 32, 136);
 }
 
+button:active {
+    font-size: 10px;
+    background-color: #b3196b
+}
+
 .one-and-a-half {
   flex: 1.5;
   font-size: 12px;
@@ -106,3 +111,10 @@ button:hover {
   font-size: 12px;
   background-color: rgb(234, 32, 136);
 }
+
+.submit:active {
+  flex: 1.5;
+  font-size: 10px;
+  background-color: #b3196b
+}
+
