@@ -4,40 +4,87 @@ import { getKendrick } from '../lib/geniusapi';
 
 const options = {
   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'lion sleeps',
-  artist: 'the tokens',
+  title: 'If these walls',
+  artist: 'Kendrik',
   optimizeQuery: true,
 };
 
 function click() {
-  const trunc = (s) => s.split(/[.?!]/)[0].split(' ').slice(0, 10).join(' ');
+  const returnSevenWords = (s) =>
+    s.split(/[.?!]/)[0].split(' ').slice(0, 7).join(' ');
+  const returnFiveWords = (s) =>
+    s.split(/[.?!]/)[0].split(' ').slice(0, 5).join(' ');
+  const returnThreeWords = (s) =>
+    s.split(/[.?!]/)[0].split(' ').slice(0, 5).join(' ');
+  const returnFourtyWords = (s) =>
+    s.split(/[.?!]/)[0].split(' ').slice(0, 40).join(' ');
+
   getLyrics(options).then((lyrics) => {
     const lyricsString = lyrics;
+    if (lyricsString.includes('Chorus')) {
+      console.log(
+        'c clue: ',
+        returnSevenWords(
+          lyricsString.substring(lyricsString.indexOf('Chorus') + 7)
+        )
+      );
+    } else {
+      console.log('doesnt');
+    }
 
-    if (lyricsString.includes('Verse 1')) {
-      console.log(
-        'THISISFIRST8WORDSOFVERSE1',
-        trunc(lyricsString.substring(lyricsString.indexOf('Verse 1') + 8))
+    // ! Below, The substring function on the return checks if the reponse from the api (string) inclues the phrase 'chorus',
+    // ! It then returns the 40 words that follow (To allow for many annotations on the chorus headers from the Genius API response)
+    // ! Then, It repeats the same process but returning 7 words after the closing bracket on the chorus tag.
+    // ! This prevents any situation where the artist is listed in the chorus header i.e '[Chorus sung by The Beatles].
+    // ! As if that content was returned, we wouldnt have a guessing game on our hands...
+
+    if (lyricsString.includes('Chorus')) {
+      const AfterEndingBracket = returnFourtyWords(
+        lyricsString.substring(lyricsString.indexOf('Chorus'))
       );
+      console.log(
+        'THIS',
+        lyricsString.substring(lyricsString.indexOf('Chorus'))
+      );
+
+      const SevenWordsafter = returnSevenWords(
+        AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+      );
+
+      console.log('Return after bracket:', SevenWordsafter);
     } else {
       console.log('doesnt');
     }
-    if (lyricsString.includes('Verse 2')) {
-      console.log(
-        'THISISFIRST8WORDSOFVERSE2',
-        trunc(lyricsString.substring(lyricsString.indexOf('Verse 2') + 8))
-      );
-    } else {
-      console.log('doesnt');
-    }
-    if (lyricsString.includes('Verse 3')) {
-      console.log(
-        'THISISFIRST8WORDSOFVERSE3',
-        trunc(lyricsString.substring(lyricsString.indexOf('Verse 3') + 8))
-      );
-    } else {
-      console.log('doesnt have a verse 3');
-    }
+    // if (lyricsString.includes('Verse 2')) {
+    //   console.log(
+    //     'v2 clue: ',
+    //     returnThreeWords(
+    //       lyricsString.substring(lyricsString.indexOf('Verse 2') + 8)
+    //     )
+    //   );
+    // } else {
+    //   console.log('doesnt');
+    // }
+    // if (lyricsString.includes('Verse 3')) {
+    //   console.log(
+    //     'v3 clue: ',
+    //     returnThreeWords(
+    //       lyricsString.substring(lyricsString.indexOf('Verse 3') + 8)
+    //     )
+    //   );
+    // } else {
+    //   console.log('doesnt have a verse 3');
+    // }
+    // if (lyricsString.includes('Verse 3')) {
+    //   console.log(
+    //     'Test ',
+    //     returnThreeWords(
+    //       lyricsString.substring(lyricsString.indexOf('Verse 3') + 8)
+    //     )
+    //   );
+    // } else {
+    //   console.log('doesnt have a verse 3');
+    // }
   });
 
   // getSong(options).then((song) =>
