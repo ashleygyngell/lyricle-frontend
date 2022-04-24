@@ -9,8 +9,14 @@ const options = {
   optimizeQuery: true,
 };
 
-// const KendrickStats = () => {};
-// setInterval(getLyrics(), 5000);
+getSong(options).then((song) =>
+  console.log(`
+    ${song.id}
+    ${song.title}
+    ${song.albumArt}
+    ${song.lyrics}`)
+);
+
 document.addEventListener('keyup', function (event) {
   if (event.code === 'ArrowDown') {
     console.log('Down is pressed!');
@@ -43,8 +49,7 @@ const Home = () => {
         // ! This prevents any situation where the artist is listed in the chorus header i.e '[Chorus sung by The Beatles].
         // ! As if that content was returned, we wouldnt have a guessing game on our hands...
 
-        // VERSE 4 RETURN
-
+        // CLUE 1 RETURN
         if (lyricsString.includes('Verse 4')) {
           const AfterEndingBracket = returnFourtyWords(
             lyricsString.substring(lyricsString.indexOf('Verse 4'))
@@ -61,10 +66,10 @@ const Home = () => {
         }
       });
     }
+    // CLUE 2 RETURN
     if (i === 2) {
       getLyrics(options).then((lyrics) => {
         const lyricsString = lyrics;
-        // VERSE 3 RETURN
         if (lyricsString.includes('Verse 3')) {
           const AfterEndingBracket = returnFourtyWords(
             lyricsString.substring(lyricsString.indexOf('Verse 3'))
@@ -81,10 +86,10 @@ const Home = () => {
         }
       });
     }
+    // CLUE 3 RETURN
     if (i === 3) {
       getLyrics(options).then((lyrics) => {
         const lyricsString = lyrics;
-        // VERSE 2 RETURN
         if (lyricsString.includes('Verse 2')) {
           const AfterEndingBracket = returnFourtyWords(
             lyricsString.substring(lyricsString.indexOf('Verse 2'))
@@ -101,10 +106,10 @@ const Home = () => {
         }
       });
     }
+    // CLUE 4 RETURN
     if (i === 4) {
       getLyrics(options).then((lyrics) => {
         const lyricsString = lyrics;
-        // VERSE 1 RETURN
         if (lyricsString.includes('Verse 1')) {
           const AfterEndingBracket = returnFourtyWords(
             lyricsString.substring(lyricsString.indexOf('Verse 1'))
@@ -120,16 +125,13 @@ const Home = () => {
         }
       });
     }
+    // CLUE 5 RETURN
     if (i === 5) {
       getLyrics(options).then((lyrics) => {
         const lyricsString = lyrics;
-        // CHORUS CLUE RETURN
+
         if (lyricsString.includes('Chorus')) {
           const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Chorus'))
-          );
-          console.log(
-            'CHORUS CLUE INITIAL RETURN:       ',
             lyricsString.substring(lyricsString.indexOf('Chorus'))
           );
           const SevenWordsafter = returnSevenWords(
@@ -142,10 +144,6 @@ const Home = () => {
           const AfterEndingBracket = returnFourtyWords(
             lyricsString.substring(lyricsString.indexOf('Intro'))
           );
-          // console.log(
-          //   'CHORUS CLUE ALT RETURN:       ',
-          //   lyricsString.substring(lyricsString.indexOf('Intro'))
-          // );
           const SevenWordsafter = returnSevenWords(
             AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
           )
@@ -154,20 +152,16 @@ const Home = () => {
           setClue5(SevenWordsafter);
         }
       });
-      // document.getElementById('clue_clicker').disabled = 'disabled';
-      // document.getElementById('clue_clicker').style.background = 'transparent';
-      // document.getElementById('clue_clicker').style.color = 'transparent';
-      const button = document.getElementById('clue_clicker');
-      button.parentNode.removeChild(button);
+      document.getElementById('clue_clicker').disabled = 'disabled';
+      document.getElementById('clue_clicker').style.background = 'grey';
+      document.getElementById('clue_clicker').innerText = '';
+      // const button = document.getElementById('clue_clicker');
+      // button.parentNode.removeChild(button);
     }
+  }
 
-    // getSong(options).then((song) =>
-    //   console.log(`
-    // ${song.id}
-    // ${song.title}
-    // ${song.albumArt}
-    // ${song.lyrics}`)
-    // );
+  function giveup() {
+    console.log('giveup');
   }
 
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
@@ -214,13 +208,38 @@ const Home = () => {
   //     }
   //   });
   // });
-
+  function AutocorrectSong() {
+    getSong(guessAutoCorrect).then((song) =>
+      console.log(
+        'this is the autocorrected song title',
+        `
+      ${song.title}
+      `
+      )
+    );
+  }
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
     if (event.key === 'Enter') {
       const newGuess = document.getElementById('guess_field').value;
       setGuess(newGuess);
+      AutocorrectSong();
+      console.log('Guess: ', guess);
       document.getElementById('guess_field').value = '';
+      //This part of the function checks to see if the submitted answer matches the song title.
+      const songtitle = getSong(options).then((song) =>
+        console.log(
+          'Returned Title:',
+          `
+    ${song.title}`
+        )
+      );
+      if (songtitle === guess) {
+        console.log('Matches!!');
+      } else {
+        click();
+        console.log('Doesnt Match');
+      }
     }
   };
 
@@ -239,9 +258,16 @@ const Home = () => {
   const [guess, setGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('time');
 
+  const guessAutoCorrect = {
+    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
+    title: { guess },
+    artist: options.artist,
+    optimizeQuery: true,
+  };
+
   setInterval(function time() {
     const d = new Date();
-    // !THIS IS HARDCODED FOR UK DEMO - NOT VALID FOR ALL TIME ZONES
+    // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
     const hours = 24 - d.getHours() - 1;
     let min = 60 - d.getMinutes();
     if ((min + '').length === 1) {
@@ -303,10 +329,16 @@ const Home = () => {
               onKeyDown={handleKeyDownOnTextField}
             />
           </div>
-          <div className="row">
-            <button className="is-ghost">
-              <i className="fa fa-circle-chevron-right yellow-color"></i>
-            </button>
+          <div id="keyboard">
+            <div className="row">
+              <button id="giveup_clicker" onClick={giveup}>
+                Give up ?
+              </button>
+              <button id="clue_clicker" onClick={click}>
+                Click for Song Lyrics{' '}
+                <i className="fa fa-circle-chevron-right "></i>
+              </button>
+            </div>
           </div>
 
           <div id="keyboard">
@@ -410,10 +442,6 @@ const Home = () => {
               </button>
             </div>
             <br />
-
-            <button id="clue_clicker" onClick={click}>
-              Click for Song Lyrics
-            </button>
           </div>
 
           <div id="the-final-countdown">
