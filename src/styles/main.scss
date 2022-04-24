@@ -22,8 +22,12 @@ body {
   background-color: #fcfcfc;
 }
 
+.hero-body {
+margin-top: -40px;
+}
+
 .clue_field {
-  font-size: 3.5vw;
+  font-size: 3vw;
   color: white;
   width: 100%;
   max-width: 90vw;
@@ -40,8 +44,8 @@ body {
   overflow: auto;
 }
 
-.guess_field {
-  font-size: 3.5vw;
+.guess_typed_field {
+  font-size: 3vw;
   color: white;
   width: 100%;
   max-width: 70vw;
@@ -52,7 +56,25 @@ body {
   border-radius: 3px;
   box-shadow: none;
   outline: none;
-  margin: 20px;
+  margin: 0px;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+.guess_rendered_field {
+  font-size: 3vw;
+  color: white;
+  width: 100%;
+  max-width: 70vw;
+  height: 3vh;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: -5px 0 5px 0 ;
   box-sizing: border-box;
   resize: vertical;
   overflow: auto;
@@ -116,5 +138,28 @@ button:active {
   flex: 1.5;
   font-size: 2vw;
   background-color: #b3196b
+}
+
+.yellow-color {
+  color: yellow;
+  font-size: 3vh
+}
+
+.yellow-color:active {
+  color: #b0b003;
+  font-size: 2.7vh
+}
+
+button.is-ghost {
+  background-color: transparent;
+}
+
+button.is-ghost:active {
+background-color: transparent;
+
+}
+
+button.is-ghost:hover {
+  background-color: transparent
 }
 
