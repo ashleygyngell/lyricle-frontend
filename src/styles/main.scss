@@ -1,0 +1,165 @@
+$forestgreen: rgb(10,13,84);
+$outdoorsgreen: rgb(234, 32, 136);
+$success: $forestgreen;
+$info: $outdoorsgreen;
+
+@import '~bulma/bulma.sass';
+
+.sample {
+  box-sizing: border-box;
+  display: block;
+  font: 17px/1.5 'Noto Sans JP', sans-serif;
+  width: 300px;
+  min-height: 250px;
+  max-height: '';
+  padding: 15px;
+  overflow: hidden;
+  outline: none;
+  resize: none;
+}
+
+body {
+  background-color: #fcfcfc;
+}
+
+.hero-body {
+margin-top: -40px;
+}
+
+.clue_field {
+  font-size: 3vw;
+  color: white;
+  width: 100%;
+  max-width: 90vw;
+  height: 3vh;
+  background-color: grey;
+  border: none;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: 10px;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+.guess_typed_field {
+  font-size: 3vw;
+  color: white;
+  width: 100%;
+  max-width: 70vw;
+  height: 3vh;
+  background-color: darkgrey;
+  border: none;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: 0px;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+.guess_rendered_field {
+  font-size: 3vw;
+  color: white;
+  width: 100%;
+  max-width: 70vw;
+  height: 3vh;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: -5px 0 5px 0 ;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+
+#keyboard {
+  margin: 0 8px;
+
+  user-select: none;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  margin: 0 auto 8px;
+  touch-action: manipulation;
+}
+
+button {
+  font-family: inherit;
+  font-weight: bold;
+  border: 0;
+  padding: 0;
+  margin: 0 6px 0 0;
+  height: 45px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: darkgray;
+  color: white;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+  background-color: rgb(234, 32, 136);
+}
+
+button:active {
+    font-size: 10px;
+    background-color: #b3196b
+}
+
+.one-and-a-half {
+  flex: 1.5;
+  font-size: 12px;
+}
+
+.submit {
+  flex: 1.5;
+  font-size: 2vw;
+  background-color: rgb(234, 32, 136);
+}
+
+.submit:active {
+  flex: 1.5;
+  font-size: 2vw;
+  background-color: #b3196b
+}
+
+.yellow-color {
+  color: yellow;
+  font-size: 3vh
+}
+
+.yellow-color:active {
+  color: #b0b003;
+  font-size: 2.7vh
+}
+
+button.is-ghost {
+  background-color: transparent;
+}
+
+button.is-ghost:active {
+background-color: transparent;
+
+}
+
+button.is-ghost:hover {
+  background-color: transparent
+}
+
