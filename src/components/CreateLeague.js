@@ -7,7 +7,7 @@ function CreateLeague() {
 
   const [leagueName, setLeagueName] = React.useState({
     league_name: '',
-    league_users: '6',
+    league_users: ['6'],
   });
 
   function handleChange(event) {
