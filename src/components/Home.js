@@ -50,7 +50,7 @@ const Home = () => {
               height="300"
             />
             <a href="/play">
-              <p>Play Todays Lyricle </p>
+              <p>Play Todays Lyricl with simon </p>
             </a>
           </div>
         </div>
