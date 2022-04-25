@@ -1,13 +1,24 @@
 import React from 'react';
 import { createLeague } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
+import { getLoggedInUserId, getUserById } from '../lib/api';
 
 function CreateLeague() {
   const navigate = useNavigate();
 
+  const [user, setUser] = React.useState();
+  React.useEffect(() => {
+    const getData = async () => {
+      const user = await getUserById(getLoggedInUserId());
+      setUser(user.data.id);
+      console.log(user.data.id);
+    };
+    getData();
+  }, []);
+
   const [leagueName, setLeagueName] = React.useState({
     league_name: '',
-    league_users: ['6'],
+    league_users: [{ user }],
   });
 
   function handleChange(event) {
@@ -55,7 +66,7 @@ function CreateLeague() {
                 </div>
               </div>
               <div className="field">
-                <label className="label">League Name</label>
+                <label className="label">League Number</label>
                 <div className="control has-icons-left">
                   <input
                     className="input"
