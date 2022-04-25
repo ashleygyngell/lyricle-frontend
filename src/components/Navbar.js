@@ -57,7 +57,7 @@ const Navbar = () => {
       >
         <div className="navbar-end">
           {getUserById() && (
-            <Link to={'/leagues'} className="navbar-item">
+            <Link to={'/userleagues'} className="navbar-item">
               <i className="fa-solid fa-trophy fa-xl"></i>
             </Link>
           )}

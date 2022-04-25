@@ -8,6 +8,7 @@ import Play from './components/Play';
 import UserProfile from './components/UserProfile';
 import JoinLeague from './components/JoinLeague';
 import CreateLeague from './components/CreateLeague';
+import ShowLeagues from './components/ShowLeagues';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/joinleague" element={<JoinLeague />} />
         <Route path="/createaleague" element={<CreateLeague />} />
+        <Route path="/userleagues" element={<ShowLeagues />} />
       </Routes>
     </BrowserRouter>
   );

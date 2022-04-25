@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function JoinLeague() {
   const navigate = useNavigate();
+  const [leagueId, setLeagueId] = React.useState();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -12,7 +13,7 @@ function JoinLeague() {
       try {
         const { data } = await joinLeague();
         localStorage.setItem('accessToken', data.token);
-        navigate('/');
+        navigate('/userprofile');
       } catch (err) {
         console.error(err);
       }
@@ -20,15 +21,37 @@ function JoinLeague() {
     getData();
   }
 
+  function handleChange(event) {
+    setLeagueId({ ...leagueId, [event.target.name]: event.target.value });
+    console.log(leagueId);
+  }
+
   return (
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="section has-background-success">
         <div className="container">
+          <div className="title has-text-centered">Join A League</div>
           <div className="columns">
             <form
               className="box column is-half is-offset-one-quarter"
               onSubmit={handleSubmit}
             >
+              <div className="field">
+                <label className="label">League Name</label>
+                <div className="control has-icons-left">
+                  <input
+                    className="input"
+                    placeholder="e.g QueenFans2022"
+                    name="league_name"
+                    onChange={handleChange}
+                    // value={leagueId}
+                    // leagueId={leagueId}
+                  />
+                  <span className="icon is-left">
+                    <i className="fa-solid fa-trophy fa-xl"></i>
+                  </span>
+                </div>
+              </div>
               <div className="field">
                 <button
                   // href="/login"

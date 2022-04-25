@@ -5,29 +5,36 @@ import { getLoggedInUserId, getUserById } from '../lib/api';
 
 function CreateLeague() {
   const navigate = useNavigate();
-
   const [user, setUser] = React.useState();
+
   React.useEffect(() => {
     const getData = async () => {
       const user = await getUserById(getLoggedInUserId());
-      setUser(user.data.id);
-      console.log(user.data.id);
+      const userId = user.data.id;
+      setUser(userId);
+      console.log('test', userId);
     };
     getData();
   }, []);
 
+  console.log('testuser', user);
+
   const [leagueName, setLeagueName] = React.useState({
     league_name: '',
-    league_users: [{ user }],
+    league_users: [],
   });
 
   function handleChange(event) {
     setLeagueName({ ...leagueName, [event.target.name]: event.target.value });
   }
 
+  // THIS FIXES A STATE ISSUE. TEMPORARY FIX.
+  function handleChangeuser(event) {
+    setLeagueName({ ...leagueName, [event.target.name]: event.target.value2 });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
-
     const getData = async () => {
       try {
         const { data } = await createLeague(leagueName);
@@ -59,24 +66,10 @@ function CreateLeague() {
                     name="league_name"
                     onChange={handleChange}
                     value={leagueName.league_name}
+                    userId={user}
                   />
                   <span className="icon is-left">
-                    <i className="fas fa-envelope"></i>
-                  </span>
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">League Number</label>
-                <div className="control has-icons-left">
-                  <input
-                    className="input"
-                    placeholder="e.g QueenFans2022"
-                    name="league_users"
-                    onChange={handleChange}
-                    value={leagueName.league_users}
-                  />
-                  <span className="icon is-left">
-                    <i className="fas fa-envelope"></i>
+                    <i className="fa-solid fa-trophy fa-xl"></i>
                   </span>
                 </div>
               </div>

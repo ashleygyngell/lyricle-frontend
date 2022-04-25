@@ -1,4 +1,5 @@
 import axios from 'axios';
+// import leagueId from './JoinLeague';
 
 const baseUrl = 'https://lyriclegamedb.herokuapp.com';
 
@@ -13,12 +14,14 @@ export const loginUser = (user) => {
   // });
 };
 
-export const joinLeague = () => {
+export const joinLeague = (leagueId) => {
   const accessToken = localStorage.getItem('accessToken');
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
-  return axios.put(`${baseUrl}/authentication/joinleague/3/`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+  return axios.put(`${baseUrl}/authentication/joinleague/1/`, leagueId, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
   });
 };
 

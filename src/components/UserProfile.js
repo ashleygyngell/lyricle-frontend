@@ -17,7 +17,8 @@ const UserProfile = () => {
   React.useEffect(() => {
     const getData = async () => {
       const userLeagues = await getUserLeagues();
-      const emptystring = '';
+      const emptystring = userLeagues.data;
+      console.log('LOOK', emptystring);
 
       console.log('userleagues', userLeagues.data[1].league_name);
       console.log('userleaguesspread', ...userLeagues.data);
@@ -40,6 +41,19 @@ const UserProfile = () => {
             <p className="title">
               <i className="fa-solid fa-trophy"></i>: {user.user_leagues}
             </p>
+            <section className="columns is-centered mt-6">
+              {/* {!userLeagues ? (
+                <p>Loading...</p>
+              ) : (
+                userLeagues.map((userLeagues) => (
+                  <>
+                    <div className="is-parent m-4">
+                      <div key={userLeagues.league_name} {...userLeagues} />
+                    </div>
+                  </>
+                ))
+              )} */}
+            </section>
             {/* <p className="title">{userLeagues}</p> */}
           </div>
         </div>
