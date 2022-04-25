@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://git.heroku.com/eflyricle.git';
+const baseUrl = 'https://git.heroku.com/lyriclegamedb.git';
 
 export const getAllCheeses = () => {
   return axios.get(`${baseUrl}/cheeses`);
