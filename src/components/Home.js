@@ -1,5 +1,5 @@
 import React from 'react';
-import lyriclelogo from '../Assets/Images/lyriclelogo.PNG';
+import lyriclelogo from '../assets/lyriclelogo.PNG';
 import { getUserById } from '../lib/api.js';
 // import { getLyrics, getSong } from 'genius-lyrics-api';
 
