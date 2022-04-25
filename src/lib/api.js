@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://lyriclegamedb.herokuapp.com/';
+const baseUrl = 'https://lyriclegamedb.herokuapp.com';
 
 // export const getAllCheeses = () => {
 //   return axios.get(`${baseUrl}/cheeses`);
