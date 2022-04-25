@@ -62,7 +62,7 @@ function CreateLeague() {
                     placeholder="e.g QueenFans2022"
                     name="league_users"
                     onChange={handleChange}
-                    value={leagueName.league_name}
+                    value={leagueName.league_users}
                   />
                   <span className="icon is-left">
                     <i className="fas fa-envelope"></i>
