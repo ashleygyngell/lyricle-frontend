@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../lib/api.js';
 import { Link } from 'react-router-dom';
-import lyriclelogo from '../assets/lyriclelogo.PNG';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ const Navbar = () => {
         <div>
           <a className="navbar-item" href="/">
             <img
-              src={lyriclelogo}
+              src="https://imgur.com/a/1TI7lQw"
               alt="Small Lyricle Logo"
               width="30"
               height="100"
