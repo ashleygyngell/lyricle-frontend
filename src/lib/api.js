@@ -27,7 +27,7 @@ export const createLeague = (leagueName) => {
   const accessToken = localStorage.getItem('accessToken');
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
-  return axios.post(`${baseUrl}/leagues/`, leagueName);
+  return axios.post(`${baseUrl}leagues/`, leagueName);
 };
 
 // export const createleague = (leagueinfo) => {
