@@ -164,19 +164,6 @@ const Home = () => {
     console.log('giveup');
   }
 
-  const [kendrikinfo, setkendrikinfo] = React.useState(null);
-  React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await getKendrick();
-        setkendrikinfo(data.response.hits);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getData();
-  }, []);
-
   // !THIS NEEDS UPDATING AS STATE ISSUE
   // const btn = document.querySelectorAll('#keyboard button');
 
@@ -258,13 +245,6 @@ const Home = () => {
   const [guess, setGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('time');
 
-  const guessAutoCorrect = {
-    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-    title: { guess },
-    artist: options.artist,
-    optimizeQuery: true,
-  };
-
   setInterval(function time() {
     const d = new Date();
     // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
@@ -279,6 +259,39 @@ const Home = () => {
     }
     setCountdown(hours + ':' + min + ':' + sec);
   }, 1000);
+
+  const [kendrikinfo, setkendrikinfo] = React.useState(null);
+  React.useEffect(() => {
+    const getData = async () => {
+      try {
+        const { data } = await getKendrick();
+        setkendrikinfo(data.response.hits);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getData();
+  }, []);
+
+  !kendrikinfo ? (
+    <div className="pageloader ">
+      <span className="title is-active ">Loading...</span>
+    </div>
+  ) : (
+    console.log(
+      'TEST',
+      kendrikinfo.map((x) => x.result.full_title),
+      console.log('TEST2', kendrikinfo[0].result.title),
+      console.log('TEST3', kendrikinfo[0].result.artist_names)
+    )
+  );
+
+  const guessAutoCorrect = {
+    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
+    title: { guess },
+    artist: options.artist,
+    optimizeQuery: true,
+  };
 
   return (
     <section className="hero is-fullheight-with-navbar is-success">
@@ -446,21 +459,6 @@ const Home = () => {
 
           <div id="the-final-countdown">
             <p>Next Lyricle in : {countdown}</p>
-          </div>
-
-          <div>
-            {!kendrikinfo ? (
-              <div className="pageloader ">
-                <span className="title is-active ">Loading...</span>
-              </div>
-            ) : (
-              console.log(
-                'TEST',
-                kendrikinfo.map((x) => x.result.full_title),
-                console.log('TEST2', kendrikinfo[0].result.title),
-                console.log('TEST3', kendrikinfo[0].result.artist_names)
-              )
-            )}
           </div>
         </div>
       </div>

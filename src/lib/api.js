@@ -20,11 +20,11 @@ export const loginUser = (user) => {
   // });
 };
 
-export const createCheese = (cheese) => {
-  return axios.post(`${baseUrl}/cheeses`, cheese, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
-  });
-};
+// export const createleague = (leagueinfo) => {
+//   return axios.post(`${baseUrl}/leagues/`, leagueinfo, {
+//     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+//   });
+// };
 
 export const getLoggedInUserId = (user) => {
   // const token = localStorage.getItem('token');
@@ -38,6 +38,15 @@ export const getUserById = () => {
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
   return axios.get(`${baseUrl}/authentication/credentials/`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+  });
+};
+
+export const getUserLeagues = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  console.log(`Bearer ${localStorage.getItem('accessToken')}`);
+  if (!accessToken) return false;
+  return axios.get(`${baseUrl}/leagues/`, {
     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
   });
 };
