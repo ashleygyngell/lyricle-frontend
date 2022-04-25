@@ -44,7 +44,7 @@ const Home = () => {
             <br />
             <img
               className="logo transform"
-              src={lyricleLogo}
+              src={lyriclelogo}
               alt="Small Lyricle Logo"
               width="90"
               height="300"
