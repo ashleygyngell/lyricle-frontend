@@ -7,7 +7,7 @@ function CreateLeague() {
 
   const [leagueName, setLeagueName] = React.useState({
     league_name: '',
-    league_users: '1',
+    league_users: '6',
   });
 
   function handleChange(event) {
@@ -46,6 +46,21 @@ function CreateLeague() {
                     className="input"
                     placeholder="e.g QueenFans2022"
                     name="league_name"
+                    onChange={handleChange}
+                    value={leagueName.league_name}
+                  />
+                  <span className="icon is-left">
+                    <i className="fas fa-envelope"></i>
+                  </span>
+                </div>
+              </div>
+              <div className="field">
+                <label className="label">League Name</label>
+                <div className="control has-icons-left">
+                  <input
+                    className="input"
+                    placeholder="e.g QueenFans2022"
+                    name="league_users"
                     onChange={handleChange}
                     value={leagueName.league_name}
                   />
