@@ -29,7 +29,7 @@ const Navbar = () => {
         <div>
           <a className="navbar-item" href="/">
             <img
-              src="https://imgur.com/a/1TI7lQw"
+              src="https://i.imgur.com/y9qikIT.png"
               alt="Small Lyricle Logo"
               width="30"
               height="100"
@@ -73,9 +73,14 @@ const Navbar = () => {
           <div className="navbar-item">
             <p className="control">
               {getUserById() ? (
-                <button className="button is-info " onClick={logOut}>
-                  Log Out
-                </button>
+                <>
+                  <button className="button is-info " onClick={logOut}>
+                    Log Out
+                  </button>
+                  <Link to={'/joinleague'} className="button is-info ">
+                    Join A League
+                  </Link>
+                </>
               ) : (
                 <button className="button is-success" onClick={logIn}>
                   <span>Log In</span>

@@ -20,10 +20,12 @@ $info: $outdoorsgreen;
 
 body {
   background-color: #fcfcfc;
+  
 }
 
 .hero-body {
 margin-top: -40px;
+// background-image: linear-gradient(to right, rgb(10, 13, 84) , yellow)
 }
 
 .clue_field {
@@ -119,7 +121,7 @@ button:hover {
 }
 
 button:active {
-    font-size: 10px;
+    
     background-color: #b3196b
 }
 

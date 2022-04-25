@@ -42,15 +42,17 @@ const Home = () => {
             )}
 
             <br />
-            <img
-              className="logo transform"
-              src="https://imgur.com/a/1TI7lQw"
-              alt="Small Lyricle Logo"
-              width="90"
-              height="300"
-            />
             <a href="/play">
-              <p>Play Todays Lyricle</p>
+              <img
+                className="logo transform"
+                src="https://i.imgur.com/y9qikIT.png"
+                alt="Small Lyricle Logo"
+                width="90"
+                height="300"
+              />
+
+              <a href="/play"></a>
+              <p>Play Lyricle</p>
             </a>
           </div>
         </div>

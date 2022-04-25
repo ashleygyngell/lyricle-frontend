@@ -4,8 +4,8 @@ import { getKendrick } from '../lib/geniusapi';
 
 const options = {
   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'bohemian rhapsody',
-  artist: 'queen',
+  title: 'wisemen',
+  artist: 'James Blunt',
   optimizeQuery: true,
 };
 

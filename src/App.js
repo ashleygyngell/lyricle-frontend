@@ -6,6 +6,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Play from './components/Play';
 import UserProfile from './components/UserProfile';
+import JoinLeague from './components/JoinLeague';
+import CreateLeague from './components/CreateLeague';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/play" element={<Play />} />
         <Route path="/userprofile" element={<UserProfile />} />
+        <Route path="/joinleague" element={<JoinLeague />} />
+        <Route path="/createaleague" element={<CreateLeague />} />
       </Routes>
     </BrowserRouter>
   );
