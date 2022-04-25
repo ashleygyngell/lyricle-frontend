@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../lib/api.js';
 import { Link } from 'react-router-dom';
-import lyriclelogo from '../assets/images/lyriclelogo.png';
+import lyriclelogo from '../Assets/Images/lyriclelogo.png';
 
 const Navbar = () => {
   const navigate = useNavigate();
