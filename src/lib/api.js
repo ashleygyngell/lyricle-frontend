@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-const baseUrl = 'https://git.heroku.com/lyriclegamedb.git';
+const baseUrl = 'https://lyriclegamedb.herokuapp.com/';
 
-export const getAllCheeses = () => {
-  return axios.get(`${baseUrl}/cheeses`);
-};
+// export const getAllCheeses = () => {
+//   return axios.get(`${baseUrl}/cheeses`);
+// };
 
-export const getSingleCheese = (id) => {
-  return axios.get(`${baseUrl}/cheeses/${id}`);
-};
+// export const getSingleCheese = (id) => {
+//   return axios.get(`${baseUrl}/cheeses/${id}`);
+// };
 
 export const registerUser = (user) => {
   return axios.post(`${baseUrl}/authentication/register/`, user);
