@@ -1,5 +1,5 @@
 import React from 'react';
-import lyriclelogo from '../assets/lyriclelogo.PNG';
+
 import { getUserById } from '../lib/api.js';
 // import { getLyrics, getSong } from 'genius-lyrics-api';
 
@@ -44,7 +44,7 @@ const Home = () => {
             <br />
             <img
               className="logo transform"
-              src={lyriclelogo}
+              src="https://imgur.com/a/1TI7lQw"
               alt="Small Lyricle Logo"
               width="90"
               height="300"
