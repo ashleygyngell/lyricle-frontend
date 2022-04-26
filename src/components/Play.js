@@ -3,9 +3,9 @@ import { getLyrics, getSong } from 'genius-lyrics-api';
 import { getKendrick } from '../lib/geniusapi';
 
 const options = {
-  apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'wisemen',
-  artist: 'James Blunt',
+  apiKey: '6rx7k9L6Lg9LenDM9LjbE3CZnICb2CBTKmVY4TO7JhMTyept33D9rOiPP2714iOt',
+  title: 'gold digger',
+  artist: 'ye',
   optimizeQuery: true,
 };
 
@@ -26,6 +26,23 @@ document.addEventListener('keyup', function (event) {
 let i = 0;
 
 const Home = () => {
+  const [countdown, setCountdown] = React.useState('At Midnight');
+
+  // setInterval(function time() {
+  //   const d = new Date();
+  //   // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
+  //   const hours = 24 - d.getHours() - 1;
+  //   let min = 60 - d.getMinutes();
+  //   if ((min + '').length === 1) {
+  //     min = '0' + min;
+  //   }
+  //   let sec = 60 - d.getSeconds();
+  //   if ((sec + '').length === 1) {
+  //     sec = '0' + sec;
+  //   }
+  //   setCountdown(hours + ':' + min + ':' + sec);
+  // }, 1000);
+
   function click() {
     i++;
     console.log(i);
@@ -54,8 +71,28 @@ const Home = () => {
           const AfterEndingBracket = returnFourtyWords(
             lyricsString.substring(lyricsString.indexOf('Verse 4'))
           );
-          const SevenWordsafter = returnSevenWords(
+          const SevenWordsafter = returnFiveWords(
             AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+          )
+            .replace(/\r?\n|\r/g, ' ')
+            .toLowerCase();
+          setClue1(SevenWordsafter);
+        } else if (lyricsString.includes('Bridge')) {
+          const AfterEndingBracket = returnFourtyWords(
+            lyricsString.substring(lyricsString.indexOf('Bridge'))
+          );
+          const SevenWordsafter = returnFiveWords(
+            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+          )
+            .replace(/\r?\n|\r/g, ' ')
+            .toLowerCase();
+          setClue1(SevenWordsafter);
+        } else if (lyricsString.includes('Verse 3')) {
+          const AfterEndingBracket = returnFourtyWords(
+            lyricsString.substring(lyricsString.indexOf('Verse 3'))
+          );
+          const SevenWordsafter = returnFiveWords(
+            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 40)
           )
             .replace(/\r?\n|\r/g, ' ')
             .toLowerCase();
@@ -76,6 +113,26 @@ const Home = () => {
           );
           const SevenWordsafter = returnSevenWords(
             AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+          )
+            .replace(/\r?\n|\r/g, ' ')
+            .toLowerCase();
+          setClue2(SevenWordsafter);
+        } else if (lyricsString.includes('Verse 2')) {
+          const AfterEndingBracket = returnFourtyWords(
+            lyricsString.substring(lyricsString.indexOf('Verse 2'))
+          );
+          const SevenWordsafter = returnSevenWords(
+            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 78)
+          )
+            .replace(/\r?\n|\r/g, ' ')
+            .toLowerCase();
+          setClue2(SevenWordsafter);
+        } else if (lyricsString.includes('Verse 2')) {
+          const AfterEndingBracket = returnFourtyWords(
+            lyricsString.substring(lyricsString.indexOf('Verse 2'))
+          );
+          const SevenWordsafter = returnSevenWords(
+            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 40)
           )
             .replace(/\r?\n|\r/g, ' ')
             .toLowerCase();
@@ -196,14 +253,20 @@ const Home = () => {
   //   });
   // });
   function AutocorrectSong() {
-    getSong(guessAutoCorrect).then((song) =>
-      console.log(
-        'this is the autocorrected song title',
-        `
-      ${song.title}
-      `
-      )
-    );
+    getSong(guessAutoCorrect).then((song) => {
+      console.log(`${song.title}`);
+      if (`${song.title}` === guess) {
+        console.log('Matches!!, You got the answer correct with', i, 'clues');
+        document.getElementById('guesstext').style.color = '#FFFF00';
+      } else {
+        click();
+        document.getElementById('guesstext').classList.toggle('shake');
+        document.getElementById('guesstext').classList.toggle('shake2');
+        document.getElementById('guesstext').style.color = '#ff0000';
+
+        console.log('Doesnt Match');
+      }
+    });
   }
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
@@ -214,19 +277,18 @@ const Home = () => {
       console.log('Guess: ', guess);
       document.getElementById('guess_field').value = '';
       //This part of the function checks to see if the submitted answer matches the song title.
-      const songtitle = getSong(options).then((song) =>
-        console.log(
-          'Returned Title:',
-          `
-    ${song.title}`
-        )
-      );
-      if (songtitle === guess) {
-        console.log('Matches!!');
-      } else {
-        click();
-        console.log('Doesnt Match');
-      }
+
+      // if (newGuess === guess) {
+      //   console.log('Matches!!');
+      //   document.getElementById('guesstext').style.color = '#FFFF00';
+      // } else {
+      //   click();
+      //   document.getElementById('guesstext').classList.toggle('shake');
+      //   document.getElementById('guesstext').classList.toggle('shake2');
+      //   document.getElementById('guesstext').style.color = '#ff0000';
+
+      //   console.log('Doesnt Match');
+      // }
     }
   };
 
@@ -243,22 +305,6 @@ const Home = () => {
   const [clue2, setClue2] = React.useState('?');
   const [clue1, setClue1] = React.useState('?');
   const [guess, setGuess] = React.useState('');
-  const [countdown, setCountdown] = React.useState('time');
-
-  setInterval(function time() {
-    const d = new Date();
-    // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
-    const hours = 24 - d.getHours() - 1;
-    let min = 60 - d.getMinutes();
-    if ((min + '').length === 1) {
-      min = '0' + min;
-    }
-    let sec = 60 - d.getSeconds();
-    if ((sec + '').length === 1) {
-      sec = '0' + sec;
-    }
-    setCountdown(hours + ':' + min + ':' + sec);
-  }, 1000);
 
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
   React.useEffect(() => {
@@ -330,6 +376,7 @@ const Home = () => {
             />
             <input
               type="text"
+              id="guesstext"
               className="guess_rendered_field has-text-centered"
               value={guess}
               readOnly
