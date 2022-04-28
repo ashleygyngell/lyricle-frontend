@@ -8,7 +8,6 @@ const options = {
   title: 'Bohemian rapsody',
   artist: 'Queen',
   optimizeQuery: true,
-  authHeader: true,
 };
 
 getSong(options).then((song) =>
