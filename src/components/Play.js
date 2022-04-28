@@ -1,11 +1,12 @@
 import React from 'react';
 import { getLyrics, getSong } from 'genius-lyrics-api';
 import { getKendrick } from '../lib/geniusapi';
+import { useEffect } from 'react';
 
 const options = {
   apiKey: '6rx7k9L6Lg9LenDM9LjbE3CZnICb2CBTKmVY4TO7JhMTyept33D9rOiPP2714iOt',
-  title: 'gold digger',
-  artist: 'ye',
+  title: 'Bohemian rapsody',
+  artist: 'Queen',
   optimizeQuery: true,
 };
 
@@ -268,27 +269,39 @@ const Home = () => {
       }
     });
   }
+
+  const [user, setUser] = React.useState({
+    email: '',
+  });
+
+  function handleChange(event) {
+    setUser({ ...user, [event.target.name]: event.target.value });
+  }
+
+  const [guess, setGuess] = React.useState('');
+
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
     if (event.key === 'Enter') {
       const newGuess = document.getElementById('guess_field').value;
       setGuess(newGuess);
       AutocorrectSong();
+
       console.log('Guess: ', guess);
       document.getElementById('guess_field').value = '';
-      //This part of the function checks to see if the submitted answer matches the song title.
+      // This part of the function checks to see if the submitted answer matches the song title.
 
-      // if (newGuess === guess) {
-      //   console.log('Matches!!');
-      //   document.getElementById('guesstext').style.color = '#FFFF00';
-      // } else {
-      //   click();
-      //   document.getElementById('guesstext').classList.toggle('shake');
-      //   document.getElementById('guesstext').classList.toggle('shake2');
-      //   document.getElementById('guesstext').style.color = '#ff0000';
+      if (newGuess === guess) {
+        console.log('Matches!!');
+        document.getElementById('guesstext').style.color = '#FFFF00';
+      } else {
+        // click();
+        document.getElementById('guesstext').classList.toggle('shake');
+        document.getElementById('guesstext').classList.toggle('shake2');
+        document.getElementById('guesstext').style.color = '#ff0000';
 
-      //   console.log('Doesnt Match');
-      // }
+        console.log('Doesnt Match');
+      }
     }
   };
 
@@ -304,7 +317,6 @@ const Home = () => {
   const [clue3, setClue3] = React.useState('?');
   const [clue2, setClue2] = React.useState('?');
   const [clue1, setClue1] = React.useState('?');
-  const [guess, setGuess] = React.useState('');
 
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
   React.useEffect(() => {

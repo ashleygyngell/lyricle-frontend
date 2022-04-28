@@ -25,7 +25,7 @@ body {
 
 .hero-body {
 margin-top: -40px;
-// background-image: linear-gradient(to right, rgb(10, 13, 84) , yellow)
+background-image: linear-gradient(to bottom ,rgb(10, 13, 84) ,rgb(10, 13, 84), #0f127a)
 }
 
 .clue_field {
@@ -170,8 +170,6 @@ button.is-ghost:hover {
 
   animation-iteration-count: 2;
 }
-
-
 
 @keyframes shake {
   0% {

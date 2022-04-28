@@ -33,15 +33,6 @@ const Home = () => {
       <div className="hero-body">
         <div className="container">
           <div className="title has-text-centered">
-            {getUserById() ? (
-              ''
-            ) : (
-              <a href="/register">
-                <p>Sign Up To Compete With Your Friends</p>
-              </a>
-            )}
-
-            <br />
             <a href="/play">
               <img
                 className="logo transform"
@@ -50,10 +41,18 @@ const Home = () => {
                 width="90"
                 height="300"
               />
-
               <a href="/play"></a>
               <p>Play Lyricle</p>
             </a>
+            <br />
+            <br />
+            {getUserById() ? (
+              ''
+            ) : (
+              <a href="/register">
+                <p>Sign Up To Compete</p>
+              </a>
+            )}
           </div>
         </div>
       </div>
