@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 const options = {
   apiKey: '6rx7k9L6Lg9LenDM9LjbE3CZnICb2CBTKmVY4TO7JhMTyept33D9rOiPP2714iOt',
+  Accept: 'https://playlyricle.com/',
   title: 'Bohemian rapsody',
   artist: 'Queen',
   optimizeQuery: true,
