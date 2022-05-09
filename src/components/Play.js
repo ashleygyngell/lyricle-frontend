@@ -29,20 +29,20 @@ let i = 0;
 const Home = () => {
   const [countdown, setCountdown] = React.useState('At Midnight');
 
-  // setInterval(function time() {
-  //   const d = new Date();
-  //   // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
-  //   const hours = 24 - d.getHours() - 1;
-  //   let min = 60 - d.getMinutes();
-  //   if ((min + '').length === 1) {
-  //     min = '0' + min;
-  //   }
-  //   let sec = 60 - d.getSeconds();
-  //   if ((sec + '').length === 1) {
-  //     sec = '0' + sec;
-  //   }
-  //   setCountdown(hours + ':' + min + ':' + sec);
-  // }, 1000);
+  setInterval(function time() {
+    const d = new Date();
+    // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
+    const hours = 24 - d.getHours() - 1;
+    let min = 60 - d.getMinutes();
+    if ((min + '').length === 1) {
+      min = '0' + min;
+    }
+    let sec = 60 - d.getSeconds();
+    if ((sec + '').length === 1) {
+      sec = '0' + sec;
+    }
+    setCountdown(hours + ':' + min + ':' + sec);
+  }, 1000);
 
   function click() {
     i++;
