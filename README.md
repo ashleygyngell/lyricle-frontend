@@ -1,5 +1,7 @@
 # Lyricle - Project 4 @ GA (General Assembly) 
 
+This project is still under development and will be released by the end of May 2022
+
 This was my final solo project on GA's Software Engineering Immersive course. 
 
 ## Deployment 
