@@ -1,4 +1,4 @@
-# LYRICLE is still under development and is due for realease by the end of May 2022
+# LYRICLE is still under development and is due for release by the end of May 2022
 
 ## Lyricle - Project 4 @ GA (General Assembly) 
 
