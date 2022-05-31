@@ -1,18 +1,29 @@
-# LYRICLE is still under development and is due for release by the end of May 2022
+# LYRICLE is still under development and is due for release in June 2022.
 
 ## Lyricle - Project 4 @ GA (General Assembly) 
 
-This was my final solo project on GA's Software Engineering Immersive course. 
 
-![game-screenshot]
+
+Lyricle in-play             |  Lyricle homepage
+:-------------------------:|:-------------------------:
+![mobile-screenshot](https://res.cloudinary.com/dj7e2jadx/image/upload/v1652974512/lyricle_screenshot_phone.png)  |  ![ipad-screenshot](https://res.cloudinary.com/dj7e2jadx/image/upload/v1652974820/lyricle_screenshot_ipad.png)
+
+
+This was my final solo project on GA's Software Engineering Immersive course. 
 
 ## Deployment 
 
-This app has been deployed via Heroku and Netlify and is available [here](https://playlyricle.com/)
+This app has been deployed via Heroku and Netlify and is available [here](https://playlyricle.com/).
+
+The free servers on Heroku sleep when they are not in use, so please allow a few seconds for them to wake up!
+
+Feel free to register as a user or use: **email:** `demo@demo.com` & **password:** `Demo123!`
+
+This Repo is for the frontend only. The code for the backend is available [here](https://github.com/ashleygyngell/lyricle-backend).
 
 # Objective
 
-- To build a full-stack application by making your own back-end and your own front-end.
+- To build a full-stack application in 10 days by making your own back-end and your own front-end.
 - Use an Express API to serve your data from a Mongo database.
 - Consume your API with a separate front-end built with React.
 - Be a complete product which most likely means multiple relationships and CRUD functionality for at least a couple of models.
@@ -47,7 +58,7 @@ The features I decided on delivering were:
 
 To wrap my head around the relationships between each aspect, I created an ERD using QuickDBD. This helped reinforce my grasp of Foreign Keys and Many to Many relationships. 
 
-![ERD-diagram] 
+![ERD-diagram](https://res.cloudinary.com/dj7e2jadx/image/upload/v1654030326/Screenshot_2022-05-31_at_21.51.44_vnf6lr.png)
 
 ## Phase Two (Days 3-5) 
 
