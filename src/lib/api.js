@@ -64,6 +64,15 @@ export const getUserLeagues = () => {
   });
 };
 
+export const getUserLeagues = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  console.log(`Bearer ${localStorage.getItem('accessToken')}`);
+  if (!accessToken) return false;
+  return axios.get(`${baseUrl}/leagues/`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+  });
+};
+
 // export const getUserById = async () => {
 //   const options = {
 //     method: 'GET',
