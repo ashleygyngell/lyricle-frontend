@@ -1,7 +1,6 @@
 import React from 'react';
-
 import { getLyrics, getSong } from 'genius-lyrics-api';
-import { getKendrick, scrapeLyrics } from '../lib/geniusapi';
+import { getKendrick } from '../lib/geniusapi';
 import { useEffect } from 'react';
 
 const options = {
@@ -30,20 +29,21 @@ let i = 0;
 const Home = () => {
   const [countdown, setCountdown] = React.useState('At Midnight');
 
-  setInterval(function time() {
-    const d = new Date();
-    // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
-    const hours = 24 - d.getHours() - 1;
-    let min = 60 - d.getMinutes();
-    if ((min + '').length === 1) {
-      min = '0' + min;
-    }
-    let sec = 60 - d.getSeconds();
-    if ((sec + '').length === 1) {
-      sec = '0' + sec;
-    }
-    setCountdown(hours + ':' + min + ':' + sec);
-  }, 1000);
+  // setInterval(function time() {
+  //   const d = new Date();
+  //   // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
+  //   const hours = 24 - d.getHours() - 1;
+  //   let min = 60 - d.getMinutes();
+  //   if ((min + '').length === 1) {
+  //     min = '0' + min;
+  //   }
+  //   let sec = 60 - d.getSeconds();
+  //   if ((sec + '').length === 1) {
+  //     sec = '0' + sec;
+  //   }
+  //   setCountdown(hours + ':' + min + ':' + sec);
+
+  // }, 1000);
 
   function click() {
     i++;
@@ -320,14 +320,11 @@ const Home = () => {
   const [clue1, setClue1] = React.useState('?');
 
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
-
   React.useEffect(() => {
     const getData = async () => {
       try {
         const { data } = await getKendrick();
         setkendrikinfo(data.response.hits);
-        const { data2 } = await scrapeLyrics();
-        console.log('heyheyheyheyyyy', data2);
       } catch (err) {
         console.error(err);
       }
@@ -343,8 +340,10 @@ const Home = () => {
     console.log(
       'TEST',
       kendrikinfo.map((x) => x.result.full_title),
-      console.log('TEST2', kendrikinfo[0].result.title),
-      console.log('TEST3', kendrikinfo[0].result.artist_names)
+      'TEST2',
+      kendrikinfo[1].result.title,
+      'TEST3',
+      kendrikinfo[0].result.artist_names
     )
   );
 

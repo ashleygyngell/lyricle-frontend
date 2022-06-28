@@ -1,22 +1,16 @@
-import React from 'react';
-import { getLyrics, getSong } from 'genius-lyrics-api';
+const Genius = require('genius-lyrics-scrape');
+const token = require('4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU');
 
-const options = {
-  apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'Blinding Lights',
-  artist: 'The Weeknd',
-  optimizeQuery: true,
-};
+const client = new Genius.Client(token);
 
-getLyrics(options).then((lyrics) => console.log(lyrics));
+client
+  .searchAPI('Hello World')
+  .then((searchRes) => {
+    console.log('First Result:\n', searchRes.result[0]);
+  })
+  .catch((err) => console.err(err));
 
-getSong(options).then((song) =>
-  console.log(`
-	${song.id}
-	${song.title}
-	${song.url}
-	${song.albumArt}
-	${song.lyrics}`)
-);
-
-setInterval(getLyrics(), 5000);
+client
+  .scrapeLyrics('https://genius.com/Travis-scott-sicko-mode-lyrics')
+  .then((scraped) => console.log('Scraped Lyrics:\n', scraped))
+  .catch((err) => console.err(err));
