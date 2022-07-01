@@ -1,31 +1,59 @@
 import React from 'react';
 import { getLyrics, getSong } from 'genius-lyrics-api';
-import { getKendrick } from '../lib/geniusapi';
-
-const options = {
-  apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  title: 'bohemian rhapsody',
-  artist: 'queen',
-  optimizeQuery: true,
-};
-
-getSong(options).then((song) =>
-  console.log(`
-    ${song.id}
-    ${song.title}
-    ${song.albumArt}
-    ${song.lyrics}`)
-);
-
-document.addEventListener('keyup', function (event) {
-  if (event.code === 'ArrowDown') {
-    console.log('Down is pressed!');
-  }
-});
+import { getKendrick, scrapeLyrics } from '../lib/geniusapi';
+import { getLyricsFromAPI } from '../lib/api.js';
 
 let i = 0;
 
 const Home = () => {
+  const options = {
+    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
+    title: 'bohemian rhapsody',
+    artist: 'queen',
+    optimizeQuery: true,
+  };
+
+  getSong(options).then((song) =>
+    console.log(`
+    ${song.id}
+    ${song.title}
+    ${song.albumArt}
+    ${song.lyrics}`)
+  );
+
+  document.addEventListener('keyup', function (event) {
+    if (event.code === 'ArrowDown') {
+      console.log('Down is pressed!');
+    }
+  });
+
+  const guessAutoCorrect = {
+    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
+    title: { guess },
+    artist: options.artist,
+    optimizeQuery: true,
+  };
+
+  const [scrapedLyrics, setScrapedLyrics] = React.useState(null);
+
+  React.useEffect(() => {
+    const getData = async () => {
+      try {
+        const { data } = await getKendrick();
+        setkendrikinfo(data.response.hits);
+        console.log(kendrikinfo);
+        setSongTitle(data.response.hits[1].result.title);
+        setArtistName(data.response.hits[1].result.artist_names);
+        const data2 = await getLyricsFromAPI(songInfo);
+        console.log('SUCCESS', data2.data);
+        setScrapedLyrics(data2.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getData();
+  }, []);
+
   function click() {
     i++;
     console.log(i);
@@ -39,119 +67,105 @@ const Home = () => {
     const returnFourtyWords = (s) =>
       s.split(/[.?!]/)[0].split(' ').slice(0, 40).join(' ');
 
+    const lyricsString = scrapedLyrics;
+
     if (i === 1) {
-      getLyrics(options).then((lyrics) => {
-        const lyricsString = lyrics;
+      // ! Below, The substring function on the return checks if the reponse from the api (string) inclues the phrase 'chorus',
+      // ! It then returns the 40 words that follow (To allow for many annotations on the chorus headers from the Genius API response)
+      // ! Then, It repeats the same process but returning 7 words after the closing bracket on the chorus tag.
+      // ! This prevents any situation where the artist is listed in the chorus header i.e '[Chorus sung by The Beatles].
+      // ! As if that content was returned, we wouldnt have a guessing game on our hands...
 
-        // ! Below, The substring function on the return checks if the reponse from the api (string) inclues the phrase 'chorus',
-        // ! It then returns the 40 words that follow (To allow for many annotations on the chorus headers from the Genius API response)
-        // ! Then, It repeats the same process but returning 7 words after the closing bracket on the chorus tag.
-        // ! This prevents any situation where the artist is listed in the chorus header i.e '[Chorus sung by The Beatles].
-        // ! As if that content was returned, we wouldnt have a guessing game on our hands...
-
-        // CLUE 1 RETURN
-        if (lyricsString.includes('Verse 4')) {
-          const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Verse 4'))
-          );
-          const SevenWordsafter = returnSevenWords(
-            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
-          )
-            .replace(/\r?\n|\r/g, ' ')
-            .toLowerCase();
-          setClue1(SevenWordsafter);
-        } else {
-          const NoClue = 'Song doesnt contain this clue!';
-          setClue1(NoClue);
-        }
-      });
+      // CLUE 1 RETURN
+      if (lyricsString.includes('Verse 4')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 4'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue1(SevenWordsafter);
+      } else {
+        const NoClue = 'Song doesnt contain this clue!';
+        setClue1(NoClue);
+      }
     }
     // CLUE 2 RETURN
     if (i === 2) {
-      getLyrics(options).then((lyrics) => {
-        const lyricsString = lyrics;
-        if (lyricsString.includes('Verse 3')) {
-          const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Verse 3'))
-          );
-          const SevenWordsafter = returnSevenWords(
-            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
-          )
-            .replace(/\r?\n|\r/g, ' ')
-            .toLowerCase();
-          setClue2(SevenWordsafter);
-        } else {
-          const NoClue = 'Song doesnt contain this clue!';
-          setClue2(NoClue);
-        }
-      });
+      if (lyricsString.includes('Verse 3')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 3'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue2(SevenWordsafter);
+      } else {
+        const NoClue = 'Song doesnt contain this clue!';
+        setClue2(NoClue);
+      }
     }
     // CLUE 3 RETURN
     if (i === 3) {
-      getLyrics(options).then((lyrics) => {
-        const lyricsString = lyrics;
-        if (lyricsString.includes('Verse 2')) {
-          const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Verse 2'))
-          );
-          const SevenWordsafter = returnSevenWords(
-            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
-          )
-            .replace(/\r?\n|\r/g, ' ')
-            .toLowerCase();
-          setClue3(SevenWordsafter);
-        } else {
-          const NoClue = 'Song Doesnt Contain this clue!';
-          setClue3(NoClue);
-        }
-      });
+      if (lyricsString.includes('Verse 2')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 2'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue3(SevenWordsafter);
+      } else {
+        const NoClue = 'Song Doesnt Contain this clue!';
+        setClue3(NoClue);
+      }
     }
     // CLUE 4 RETURN
     if (i === 4) {
-      getLyrics(options).then((lyrics) => {
-        const lyricsString = lyrics;
-        if (lyricsString.includes('Verse 1')) {
-          const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Verse 1'))
-          );
-          const SevenWordsafter = returnSevenWords(
-            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
-          )
-            .replace(/\r?\n|\r/g, ' ')
-            .toLowerCase();
-          setClue4(SevenWordsafter);
-        } else {
-          console.log('Song doesnt contain Verse 1!');
-        }
-      });
+      if (lyricsString.includes('Verse 1')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 1'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue4(SevenWordsafter);
+      } else {
+        console.log('Song doesnt contain Verse 1!');
+      }
     }
     // CLUE 5 RETURN
     if (i === 5) {
-      getLyrics(options).then((lyrics) => {
-        const lyricsString = lyrics;
+      if (lyricsString.includes('Chorus')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Chorus'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue5(SevenWordsafter);
+      } else if (lyricsString.includes('Intro')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Intro'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue5(SevenWordsafter);
+      }
 
-        if (lyricsString.includes('Chorus')) {
-          const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Chorus'))
-          );
-          const SevenWordsafter = returnSevenWords(
-            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
-          )
-            .replace(/\r?\n|\r/g, ' ')
-            .toLowerCase();
-          setClue5(SevenWordsafter);
-        } else if (lyricsString.includes('Intro')) {
-          const AfterEndingBracket = returnFourtyWords(
-            lyricsString.substring(lyricsString.indexOf('Intro'))
-          );
-          const SevenWordsafter = returnSevenWords(
-            AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
-          )
-            .replace(/\r?\n|\r/g, ' ')
-            .toLowerCase();
-          setClue5(SevenWordsafter);
-        }
-      });
       document.getElementById('clue_clicker').disabled = 'disabled';
       document.getElementById('clue_clicker').style.background = 'grey';
       document.getElementById('clue_clicker').innerText = '';
@@ -195,6 +209,7 @@ const Home = () => {
   //     }
   //   });
   // });
+
   function AutocorrectSong() {
     getSong(guessAutoCorrect).then((song) =>
       console.log(
@@ -205,6 +220,7 @@ const Home = () => {
       )
     );
   }
+
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
     if (event.key === 'Enter') {
@@ -245,33 +261,29 @@ const Home = () => {
   const [guess, setGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('time');
 
-  setInterval(function time() {
-    const d = new Date();
-    // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
-    const hours = 24 - d.getHours() - 1;
-    let min = 60 - d.getMinutes();
-    if ((min + '').length === 1) {
-      min = '0' + min;
-    }
-    let sec = 60 - d.getSeconds();
-    if ((sec + '').length === 1) {
-      sec = '0' + sec;
-    }
-    setCountdown(hours + ':' + min + ':' + sec);
-  }, 1000);
+  // setInterval(function time() {
+  //   const d = new Date();
+  //   // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
+  //   const hours = 24 - d.getHours() - 1;
+  //   let min = 60 - d.getMinutes();
+  //   if ((min + '').length === 1) {
+  //     min = '0' + min;
+  //   }
+  //   let sec = 60 - d.getSeconds();
+  //   if ((sec + '').length === 1) {
+  //     sec = '0' + sec;
+  //   }
+  //   setCountdown(hours + ':' + min + ':' + sec);
+  // }, 1000);
+
+  const [songTitle, setSongTitle] = React.useState(null);
+  const [artistName, setArtistName] = React.useState(null);
+  const songInfo = {
+    song_title: 'Blank Space',
+    song_artist: 'Taylor Swift',
+  };
 
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
-  React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await getKendrick();
-        setkendrikinfo(data.response.hits);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getData();
-  }, []);
 
   !kendrikinfo ? (
     <div className="pageloader ">
@@ -279,19 +291,13 @@ const Home = () => {
     </div>
   ) : (
     console.log(
-      'TEST',
-      kendrikinfo.map((x) => x.result.full_title),
-      console.log('TEST2', kendrikinfo[0].result.title),
-      console.log('TEST3', kendrikinfo[0].result.artist_names)
+      // 'TEST',
+      // kendrikinfo.map((x) => x.result.full_title)
+      'title',
+      songTitle,
+      artistName
     )
   );
-
-  const guessAutoCorrect = {
-    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-    title: { guess },
-    artist: options.artist,
-    optimizeQuery: true,
-  };
 
   return (
     <section className="hero is-fullheight-with-navbar is-success">
@@ -342,6 +348,7 @@ const Home = () => {
               onKeyDown={handleKeyDownOnTextField}
             />
           </div>
+
           <div id="keyboard">
             <div className="row">
               <button id="giveup_clicker" onClick={giveup}>
@@ -353,7 +360,6 @@ const Home = () => {
               </button>
             </div>
           </div>
-
           <div id="keyboard">
             <div className="row">
               <button data-key="q" className="">
@@ -456,7 +462,6 @@ const Home = () => {
             </div>
             <br />
           </div>
-
           <div id="the-final-countdown">
             <p>Next Lyricle in : {countdown}</p>
           </div>
