@@ -6,6 +6,14 @@ import { getLyricsFromAPI } from '../lib/api.js';
 let i = 0;
 
 const Home = () => {
+  const [clue5, setClue5] = React.useState('?');
+  const [clue4, setClue4] = React.useState('?');
+  const [clue3, setClue3] = React.useState('?');
+  const [clue2, setClue2] = React.useState('?');
+  const [clue1, setClue1] = React.useState('?');
+  const [guess, setGuess] = React.useState('');
+  const [countdown, setCountdown] = React.useState('time');
+
   const options = {
     apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
     title: 'bohemian rhapsody',
@@ -35,16 +43,29 @@ const Home = () => {
   };
 
   const [scrapedLyrics, setScrapedLyrics] = React.useState(null);
+  const [songTitle, setSongTitle] = React.useState(null);
+  const [artistName, setArtistName] = React.useState(null);
+  const songInfo = {
+    song_title: `${songTitle}`,
+    song_artist: `${artistName}`,
+  };
 
   React.useEffect(() => {
     const getData = async () => {
       try {
         const { data } = await getKendrick();
         setkendrikinfo(data.response.hits);
-        console.log(kendrikinfo);
+        console.log('kenny', kendrikinfo);
         setSongTitle(data.response.hits[1].result.title);
         setArtistName(data.response.hits[1].result.artist_names);
-        const data2 = await getLyricsFromAPI(songInfo);
+        console.log(
+          'HEYHEYHEY',
+          data.response.hits[1].result.primary_artist.name
+        );
+        const data2 = await getLyricsFromAPI({
+          song_title: data.response.hits[2].result.title,
+          song_artist: data.response.hits[2].result.primary_artist.name,
+        });
         console.log('SUCCESS', data2.data);
         setScrapedLyrics(data2.data);
       } catch (err) {
@@ -253,14 +274,6 @@ const Home = () => {
     }
   };
 
-  const [clue5, setClue5] = React.useState('?');
-  const [clue4, setClue4] = React.useState('?');
-  const [clue3, setClue3] = React.useState('?');
-  const [clue2, setClue2] = React.useState('?');
-  const [clue1, setClue1] = React.useState('?');
-  const [guess, setGuess] = React.useState('');
-  const [countdown, setCountdown] = React.useState('time');
-
   // setInterval(function time() {
   //   const d = new Date();
   //   // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
@@ -276,13 +289,6 @@ const Home = () => {
   //   setCountdown(hours + ':' + min + ':' + sec);
   // }, 1000);
 
-  const [songTitle, setSongTitle] = React.useState(null);
-  const [artistName, setArtistName] = React.useState(null);
-  const songInfo = {
-    song_title: 'Blank Space',
-    song_artist: 'Taylor Swift',
-  };
-
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
 
   !kendrikinfo ? (
@@ -291,11 +297,13 @@ const Home = () => {
     </div>
   ) : (
     console.log(
-      // 'TEST',
-      // kendrikinfo.map((x) => x.result.full_title)
+      'TEST',
+      kendrikinfo.map((x) => x.result.full_title),
       'title',
       songTitle,
-      artistName
+      artistName,
+      'songinfo',
+      songInfo
     )
   );
 
