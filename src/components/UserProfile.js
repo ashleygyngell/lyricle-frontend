@@ -40,7 +40,7 @@ const UserProfile = () => {
             <p className="title">
               <i className="fa-solid fa-trophy"></i>: {user.user_leagues}
             </p>
-            {/* <p className="title">{userLeagues}</p> */}
+            <p className="title">{userLeagues}</p>
           </div>
         </div>
       </div>

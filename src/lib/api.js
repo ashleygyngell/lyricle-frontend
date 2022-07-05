@@ -2,14 +2,6 @@ import axios from 'axios';
 
 const baseUrl = 'http://localhost:8000';
 
-export const getAllCheeses = () => {
-  return axios.get(`${baseUrl}/cheeses`);
-};
-
-export const getSingleCheese = (id) => {
-  return axios.get(`${baseUrl}/cheeses/${id}`);
-};
-
 export const registerUser = (user) => {
   return axios.post(`${baseUrl}/authentication/register/`, user);
 };
