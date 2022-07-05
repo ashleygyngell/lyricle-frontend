@@ -77,11 +77,14 @@ const Play = () => {
       }
     };
 
+    const disabledValue = document.getElementById('clue_clicker');
+
     getData().then(
       // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
 
-      (document.getElementById('clue_clicker').disabled = 'false'),
-      (document.getElementById('clue_clicker').style.background = 'dark grey'),
+      disabledValue.removeAttribute('disabled'),
+      (document.getElementById('clue_clicker').style.background =
+        'rgb(169, 169, 169)'),
       (document.getElementById('clue_clicker').innerText = 'clue')
     );
   }, []);
