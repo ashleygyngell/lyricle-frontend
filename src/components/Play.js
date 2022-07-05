@@ -51,6 +51,10 @@ const Home = () => {
   };
 
   React.useEffect(() => {
+    document.getElementById('clue_clicker').disabled = 'disabled';
+    document.getElementById('clue_clicker').style.background = 'grey';
+    document.getElementById('clue_clicker').innerText = 'loading lyrics';
+
     const getData = async () => {
       try {
         const { data } = await getKendrick();
@@ -72,7 +76,14 @@ const Home = () => {
         console.error(err);
       }
     };
-    getData();
+
+    getData().then(
+      // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
+
+      (document.getElementById('clue_clicker').disabled = 'false'),
+      (document.getElementById('clue_clicker').style.background = 'dark grey'),
+      (document.getElementById('clue_clicker').innerText = 'clue')
+    );
   }, []);
 
   function click() {
@@ -363,7 +374,7 @@ const Home = () => {
                 Give up ?
               </button>
               <button id="clue_clicker" onClick={click}>
-                Click for Song Lyrics{' '}
+                Click for Song Lyrics{'  '}
                 <i className="fa fa-circle-chevron-right "></i>
               </button>
             </div>
