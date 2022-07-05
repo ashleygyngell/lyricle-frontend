@@ -5,7 +5,7 @@ import { getLyricsFromAPI } from '../lib/api.js';
 
 let i = 0;
 
-const Home = () => {
+const Play = () => {
   const [clue5, setClue5] = React.useState('?');
   const [clue4, setClue4] = React.useState('?');
   const [clue3, setClue3] = React.useState('?');
@@ -491,4 +491,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Play;
