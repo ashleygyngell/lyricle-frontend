@@ -65,7 +65,7 @@ export const getUserLeagues = () => {
 };
 
 export const getLyricsFromAPI = (songInfo) => {
-  return axios.post(`${baseUrl}/getlyrics`, songInfo);
+  return axios.post(`${baseUrl}/getlyrics/`, songInfo);
 };
 
 // export const getUserById = async () => {
