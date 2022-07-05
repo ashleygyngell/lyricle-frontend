@@ -67,8 +67,8 @@ const Play = () => {
           data.response.hits[1].result.primary_artist.name
         );
         const data2 = await getLyricsFromAPI({
-          song_title: data.response.hits[2].result.title,
-          song_artist: data.response.hits[2].result.primary_artist.name,
+          song_title: data.response.hits[1].result.title,
+          song_artist: data.response.hits[1].result.primary_artist.name,
         });
         console.log('SUCCESS', data2.data);
         setScrapedLyrics(data2.data);
@@ -78,7 +78,6 @@ const Play = () => {
     };
 
     const disabledValue = document.getElementById('clue_clicker');
-
     getData().then(
       // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
 
@@ -175,6 +174,8 @@ const Play = () => {
         setClue4(SevenWordsafter);
       } else {
         console.log('Song doesnt contain Verse 1!');
+        const NoClue = 'Song doesnt contain this clue!';
+        setClue4(NoClue);
       }
     }
     // CLUE 5 RETURN
@@ -199,11 +200,16 @@ const Play = () => {
           .replace(/\r?\n|\r/g, ' ')
           .toLowerCase();
         setClue5(SevenWordsafter);
+      } else if (!lyricsString.includes('Chorus')) {
+        console.log('Song doesnt contain Chorus!');
+        const NoClue = 'Song doesnt contain this clue!';
+        setClue5(NoClue);
       }
 
       document.getElementById('clue_clicker').disabled = 'disabled';
       document.getElementById('clue_clicker').style.background = 'grey';
       document.getElementById('clue_clicker').innerText = '';
+
       // const button = document.getElementById('clue_clicker');
       // button.parentNode.removeChild(button);
     }
