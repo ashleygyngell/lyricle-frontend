@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 import Register from './components/Register';
 import Login from './components/Login';
 import Play from './components/Play';
-import PlayTest from './components/PlayTest';
 import UserProfile from './components/UserProfile';
 import JoinLeague from './components/JoinLeague';
 import CreateLeague from './components/CreateLeague';
@@ -20,7 +19,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/play" element={<Play />} />
-        <Route path="/playtest" element={<PlayTest />} />
         <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/joinleague" element={<JoinLeague />} />
         <Route path="/createaleague" element={<CreateLeague />} />

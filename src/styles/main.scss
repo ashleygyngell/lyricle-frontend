@@ -29,12 +29,30 @@ background-image: linear-gradient(to bottom ,rgb(10, 13, 84) ,rgb(10, 13, 84), #
 }
 
 .clue_field {
-  font-size: 3vw;
+  font-size: 2.5vw;
   color: white;
   width: 100%;
   max-width: 90vw;
   height: 3vh;
   background-color: grey;
+  border: none;
+  padding: 25px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow: auto;
+}
+
+.guess_typed_field {
+font-size: 2.5vw;
+  color: white;
+  width: 100%;
+  max-width: 70vw;
+  height: 3vh;
+  background-color: darkgrey;
   border: none;
   padding: 20px;
   border-radius: 3px;
@@ -46,40 +64,29 @@ background-image: linear-gradient(to bottom ,rgb(10, 13, 84) ,rgb(10, 13, 84), #
   overflow: auto;
 }
 
-.guess_typed_field {
-  font-size: 3vw;
+.guess_rendered_field {
+font-size: 2.5vw;
   color: white;
   width: 100%;
-  max-width: 70vw;
+  max-width: 90vw;
   height: 3vh;
-  background-color: darkgrey;
+  background-color: transparent;
   border: none;
-  padding: 20px;
-  border-radius: 3px;
+  padding: 25px;
+  // border-radius: 3px;
   box-shadow: none;
   outline: none;
-  margin: 0px;
+  margin: 8px;
   box-sizing: border-box;
   resize: vertical;
   overflow: auto;
 }
 
-.guess_rendered_field {
-  font-size: 3vw;
-  color: white;
-  width: 100%;
-  max-width: 70vw;
-  height: 3vh;
-  background-color: transparent;
-  border: none;
-  padding: 10px;
-  border-radius: 3px;
-  box-shadow: none;
-  outline: none;
-  margin: -5px 0 5px 0 ;
-  box-sizing: border-box;
-  resize: vertical;
-  overflow: auto;
+#the-final-countdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: $outdoorsgreen;
 }
 
 
@@ -166,53 +173,42 @@ button.is-ghost:hover {
 }
 
 #guesstext.shake {
-  animation: shake 0.5s;
-
-  animation-iteration-count: 2;
+  position: relative;
+    animation: shake .1s linear;
+    animation-iteration-count: 3;
 }
 
 @keyframes shake {
   0% {
-    transform: translate(-1px, 1px) rotate(0deg);
-  }
-
-  10% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
-
-  20% {
-    transform: translate(3px, 0px) rotate(0deg);
-  }
-
-  30% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
-
-  40% {
-    transform: translate(-3px, 0px) rotate(0deg);
-  }
-
-  50% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
-
-  60% {
-    transform: translate(3px, 0px) rotate(0deg);
-  }
-
-  70% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
-
-  80% {
-    transform: translate(-3px, 0px) rotate(0deg);
-  }
-
-  90% {
-    transform: translate(0px, 0px) rotate(0deg);
+    left: -1px;
   }
 
   100% {
-    transform: translate(3px, 0px) rotate(0deg);
+    right: -1px;
   }
 }
+
+#guesstext.shakeSuccess {
+  position: relative;
+  // animation: shakeSuccess .3s ease-in-out;
+  // animation-iteration-count: 3;
+  transition: 1s ease-in-out;
+  transform:scale(1.6)
+  
+}
+
+@keyframes shakeSuccess {
+  0% {
+    top: -1px;
+  }
+
+  100% {
+    bottom: -1px;
+  }
+}
+
+
+
+
+
+

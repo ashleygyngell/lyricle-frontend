@@ -2,8 +2,11 @@ import React from 'react';
 import { getLyrics, getSong } from 'genius-lyrics-api';
 import { getKendrick, scrapeLyrics } from '../lib/geniusapi';
 import { getLyricsFromAPI } from '../lib/api.js';
+import { autoCorrectSong } from '../lib/spotifyapi.js';
+import axios from 'axios';
 
 let i = 0;
+let guessedCorrect = false;
 
 const Play = () => {
   const [clue5, setClue5] = React.useState('?');
@@ -12,35 +15,16 @@ const Play = () => {
   const [clue2, setClue2] = React.useState('?');
   const [clue1, setClue1] = React.useState('?');
   const [guess, setGuess] = React.useState('');
-  const [countdown, setCountdown] = React.useState('time');
+  const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
+  const [submittedGuess, setSubmittedGuess] = React.useState('');
+  const [countdown, setCountdown] = React.useState('');
 
-  const options = {
-    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-    title: 'bohemian rhapsody',
-    artist: 'queen',
-    optimizeQuery: true,
-  };
-
-  getSong(options).then((song) =>
-    console.log(`
-    ${song.id}
-    ${song.title}
-    ${song.albumArt}
-    ${song.lyrics}`)
-  );
-
-  document.addEventListener('keyup', function (event) {
-    if (event.code === 'ArrowDown') {
-      console.log('Down is pressed!');
-    }
-  });
-
-  const guessAutoCorrect = {
-    apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-    title: { guess },
-    artist: options.artist,
-    optimizeQuery: true,
-  };
+  // const guessAutoCorrect = {
+  //   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
+  //   title: { guess },
+  //   artist: { artistName },
+  //   optimizeQuery: true,
+  // };
 
   const [scrapedLyrics, setScrapedLyrics] = React.useState(null);
   const [songTitle, setSongTitle] = React.useState(null);
@@ -53,22 +37,22 @@ const Play = () => {
   React.useEffect(() => {
     document.getElementById('clue_clicker').disabled = 'disabled';
     document.getElementById('clue_clicker').style.background = 'grey';
-    document.getElementById('clue_clicker').innerText = 'loading lyrics';
+    document.getElementById('clue_clicker').innerText = 'loading lyricle';
 
     const getData = async () => {
       try {
         const { data } = await getKendrick();
         setkendrikinfo(data.response.hits);
-        console.log('kenny', kendrikinfo);
-        setSongTitle(data.response.hits[1].result.title);
-        setArtistName(data.response.hits[1].result.artist_names);
+        setSongTitle(data.response.hits[2].result.title);
+        setArtistName(data.response.hits[2].result.artist_names);
         console.log(
           'HEYHEYHEY',
-          data.response.hits[1].result.primary_artist.name
+          data.response.hits[2].result.primary_artist.name,
+          data.response.hits[2].result.title
         );
         const data2 = await getLyricsFromAPI({
-          song_title: data.response.hits[1].result.title,
-          song_artist: data.response.hits[1].result.primary_artist.name,
+          song_title: data.response.hits[2].result.title,
+          song_artist: data.response.hits[2].result.primary_artist.name,
         });
         console.log('SUCCESS', data2.data);
         setScrapedLyrics(data2.data);
@@ -76,6 +60,33 @@ const Play = () => {
         console.error(err);
       }
     };
+
+    const options = {
+      method: 'GET',
+      url: 'https://spotify81.p.rapidapi.com/search',
+      params: {
+        q: `${guess},
+        ${artistName}`,
+        type: 'multi',
+        offset: '0',
+        limit: '10',
+        numberOfTopResults: '5',
+      },
+      headers: {
+        'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
+        'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        setAutoCorectGuess(response.data.tracks[0].data.name);
+        console.log('autocorrectguess', autoCorrectGuess);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
 
     const disabledValue = document.getElementById('clue_clicker');
     getData().then(
@@ -86,7 +97,67 @@ const Play = () => {
         'rgb(169, 169, 169)'),
       (document.getElementById('clue_clicker').innerText = 'clue')
     );
+
+    setInterval(function time() {
+      const d = new Date();
+      // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
+      const hours = 24 - d.getHours() - 1;
+      let min = 60 - d.getMinutes();
+      if ((min + '').length === 1) {
+        min = '0' + min;
+      }
+      let sec = 60 - d.getSeconds();
+      if ((sec + '').length === 1) {
+        sec = '0' + sec;
+      }
+      setCountdown(hours + ':' + min + ':' + sec);
+    }, 1000);
   }, []);
+
+  const checkGuessForData = async () => {
+    try {
+      const data = await autoCorrectSong();
+      setAutoCorectGuess(data);
+      console.log('DATAFORCORRECT', autocorrectGuess);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  function checkGuess() {
+    const guessField = document.getElementById('guess_field').value;
+    let shake = document.getElementById('guesstext');
+
+    if (guessField == songTitle) {
+      console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
+      document.getElementById('guesstext').style.color = '#FFFF00';
+
+      shake.classList.toggle('shakeSuccess');
+      document.getElementById('guess_field').readOnly = true;
+      const disabledValue = document.getElementById('clue_clicker');
+
+      // const disabledValue = document.getElementById('clue_clicker');
+
+      // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
+
+      disabledValue.setAttribute('class', 'disabled'),
+        (document.getElementById('clue_clicker').style.background = 'grey'),
+        (document.getElementById('clue_clicker').innerText = '');
+
+      // setTimeout(function () {
+      //   shake.classList.toggle('shakeSuccess'), 1001;
+      // });
+    } else {
+      setTimeout(function () {
+        shake.classList.toggle('shake');
+      }, 1000);
+      setTimeout(function () {
+        shake.classList.toggle('shake'), 1001;
+      });
+      // document.getElementById('guesstext').classList.toggle('shake');
+      document.getElementById('guesstext').style.color = '#ff0000';
+    }
+  }
 
   function click() {
     i++;
@@ -220,112 +291,39 @@ const Play = () => {
   }
 
   // !THIS NEEDS UPDATING AS STATE ISSUE
-  // const btn = document.querySelectorAll('#keyboard button');
 
-  // btn.forEach(function (elm) {
-  //   elm.addEventListener('click', function () {
-  //     const r = document.querySelector(['active']);
-  //     const l = elm.dataset.key;
-  //     console.log(l);
-  //     setGuess([guess].append(l));
-
-  //     if (l === '←') {
-  //       if (Number(r.dataset.length) > 0) {
-  //         r.querySelectorAll('.letter')[r.dataset.length].dataset.letter = '';
-  //         r.querySelectorAll('.letter')[r.dataset.length].innerText = '';
-  //       }
-  //     } else if (l === '↵') {
-  //       //   if (Number(r.dataset.length) === 0) {
-
-  //       //     console.log('noguess')
-  //       //   }
-  //       // } else {
-  //       //   if (Number(r.dataset.length) < 5) {
-  //       //     r.dataset.word = r.dataset.word + l;
-  //       //     r.querySelectorAll('.letter')[r.dataset.length].dataset.letter = l;
-  //       //     r.querySelectorAll('.letter')[r.dataset.length].innerText = l;
-  //       //     r.dataset.length = Number(r.dataset.length) + 1;
-  //       //   }
-  //       console.log('hit enter');
-  //     }
-  //   });
-  // });
-
-  function AutocorrectSong() {
-    getSong(guessAutoCorrect).then((song) =>
-      console.log(
-        'this is the autocorrected song title',
-        `
-      ${song.title}
-      `
-      )
-    );
-  }
+  // function AutocorrectSong() {
+  //   getSong(guessAutoCorrect).then((song) =>
+  //     console.log(
+  //       'this is the autocorrected song title',
+  //       `
+  //     ${song.title}
+  //     `
+  //     )
+  //   );
+  // }
 
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
+    const newGuess = document.getElementById('guess_field').value;
+    setGuess(newGuess);
     if (event.key === 'Enter') {
-      const newGuess = document.getElementById('guess_field').value;
-      setGuess(newGuess);
-      AutocorrectSong();
-      console.log('Guess: ', guess);
+      setSubmittedGuess(newGuess);
+      checkGuess();
       document.getElementById('guess_field').value = '';
       //This part of the function checks to see if the submitted answer matches the song title.
-      const songtitle = getSong(options).then((song) =>
-        console.log(
-          'Returned Title:',
-          `
-    ${song.title}`
-        )
-      );
-      if (songtitle === guess) {
-        console.log('Matches!!');
-      } else {
+      if (guess == songTitle) {
+        console.log('WIN');
+      } else if (guess !== songTitle && i <= 4) {
         click();
-        console.log('Doesnt Match');
+      } else {
+        console.log('No More Guesses');
       }
     }
   };
 
-  // Event Listener For Next Clue,
-  const handleKeyDownOnClue = (event) => {
-    if (event.key === 'ArrowDown') {
-      console.log('Arrow Button, Pressed Down');
-    }
-  };
-
-  // setInterval(function time() {
-  //   const d = new Date();
-  //   // !THIS IS HARDCODED FOR A UK DEMO - NOT VALID FOR ALL TIME ZONES (-1 add on to hours)
-  //   const hours = 24 - d.getHours() - 1;
-  //   let min = 60 - d.getMinutes();
-  //   if ((min + '').length === 1) {
-  //     min = '0' + min;
-  //   }
-  //   let sec = 60 - d.getSeconds();
-  //   if ((sec + '').length === 1) {
-  //     sec = '0' + sec;
-  //   }
-  //   setCountdown(hours + ':' + min + ':' + sec);
-  // }, 1000);
-
   const [kendrikinfo, setkendrikinfo] = React.useState(null);
 
-  !kendrikinfo ? (
-    <div className="pageloader ">
-      <span className="title is-active ">Loading...</span>
-    </div>
-  ) : (
-    console.log(
-      'TEST',
-      kendrikinfo.map((x) => x.result.full_title),
-      'title',
-      songTitle,
-      artistName,
-      'songinfo',
-      songInfo
-    )
-  );
   return (
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="hero-body">
@@ -365,7 +363,7 @@ const Play = () => {
               type="text"
               id="guesstext"
               className="guess_rendered_field has-text-centered"
-              value={guess}
+              value={submittedGuess}
               readOnly
             />
 
@@ -388,111 +386,8 @@ const Play = () => {
             </div>
           </div>
 
-          <div id="keyboard">
-            <div className="row">
-              <button data-key="q" className="">
-                q
-              </button>
-              <button data-key="w" className="">
-                w
-              </button>
-              <button data-key="e" className="">
-                e
-              </button>
-              <button data-key="r" className="">
-                r
-              </button>
-              <button data-key="t" className="">
-                t
-              </button>
-              <button data-key="y" className="">
-                y
-              </button>
-              <button data-key="u" className="">
-                u
-              </button>
-              <button data-key="i" className="">
-                i
-              </button>
-              <button data-key="o" className="">
-                o
-              </button>
-              <button data-key="p" className="">
-                p
-              </button>
-            </div>
-            <div className="row">
-              <div className="spacer half"></div>
-              <button data-key="a" className="">
-                a
-              </button>
-              <button data-key="s" className="">
-                s
-              </button>
-              <button data-key="d" className="">
-                d
-              </button>
-              <button data-key="f" className="">
-                f
-              </button>
-              <button data-key="g" className="">
-                g
-              </button>
-              <button data-key="h" className="">
-                h
-              </button>
-              <button data-key="j" className="">
-                j
-              </button>
-              <button data-key="k" className="">
-                k
-              </button>
-              <button data-key="l" className="">
-                l
-              </button>
-              <div className="spacer half"></div>
-            </div>
-            <div className="row">
-              <button data-key="↵" className="submit">
-                Submit
-              </button>
-
-              <button data-key="z" className="">
-                z
-              </button>
-              <button data-key="x" className="">
-                x
-              </button>
-              <button data-key="c" className="">
-                c
-              </button>
-              <button data-key="v" className="">
-                v
-              </button>
-              <button data-key="b" className="">
-                b
-              </button>
-              <button data-key="n" className="">
-                n
-              </button>
-              <button data-key="m" className="">
-                m
-              </button>
-              <button data-key="←" className="one-and-a-half">
-                <i className="fas fa-backspace"></i>
-              </button>
-            </div>
-            <div className="row">
-              <button data-key=" " className="">
-                {' '}
-                Space{' '}
-              </button>
-            </div>
-            <br />
-          </div>
-
           <div id="the-final-countdown">
-            <p>Next Lyricle in : {countdown}</p>
+            <p>Next Lyricle: {countdown}</p>
           </div>
         </div>
       </div>

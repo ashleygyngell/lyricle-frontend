@@ -1,35 +1,26 @@
 import React from 'react';
 import { getLoggedInUserId, getUserById, getUserLeagues } from '../lib/api';
+import LeagueCard from './LeagueCard';
 
 const UserProfile = () => {
   const [user, setUser] = React.useState({});
-  const [userLeagues, setUserLeagues] = React.useState({});
 
   React.useEffect(() => {
     const getData = async () => {
-      const user = await getUserById(getLoggedInUserId());
-      setUser(user.data);
-      console.log(user.data);
+      try {
+        const user = await getUserById(getLoggedInUserId());
+
+        setUser(user.data);
+
+        console.log('userdata', user.data);
+      } catch (err) {
+        console.error(err);
+      }
     };
     getData();
   }, []);
 
-  React.useEffect(() => {
-    const getData = async () => {
-      const userLeagues = await getUserLeagues();
-      const emptystring = userLeagues.data;
-      console.log('LOOK', emptystring);
-
-      console.log('userleagues', userLeagues.data[1].league_name);
-      console.log('userleaguesspread', ...userLeagues.data);
-      const populatedstring = (emptystring, { ...userLeagues.data });
-      setUserLeagues(populatedstring);
-      console.log('populates', populatedstring);
-    };
-    getData();
-  }, []);
-
-  console.log('user', user);
+  // let result = objArray.map(({ foo }) => foo)
 
   return (
     <section className="hero is-fullheight-with-navbar is-info">
@@ -38,23 +29,16 @@ const UserProfile = () => {
           <div className="column is-6">
             <p className="title">{user.image}</p>
             <p className="title">{user.username}</p>
-            <p className="title">
-              <i className="fa-solid fa-trophy"></i>: {user.user_leagues}
-            </p>
-            <section className="columns is-centered mt-6">
+            <div className="columns is-multiline">
+              <i className="fa-solid fa-trophy"></i>
               {/* {!userLeagues ? (
-                <p>Loading...</p>
+                <p>Loading Leagues...</p>
               ) : (
-                userLeagues.map((userLeagues) => (
-                  <>
-                    <div className="is-parent m-4">
-                      <div key={userLeagues.league_name} {...userLeagues} />
-                    </div>
-                  </>
+                userLeagues.map((league) => (
+                  <LeagueCard key={league._id} {...league} />
                 ))
               )} */}
-            </section>
-            {/* <p className="title">{userLeagues}</p> */}
+            </div>
           </div>
         </div>
       </div>

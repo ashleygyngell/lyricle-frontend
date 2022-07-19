@@ -1,44 +1,49 @@
 import React from 'react';
 import { getLoggedInUserId, getUserById, getUserLeagues } from '../lib/api';
+import LeagueCard from './LeagueCard';
 
 const UserProfile = () => {
   const [user, setUser] = React.useState({});
-  const [userLeagues, setUserLeagues] = React.useState({});
+  const [sortedLeagues, setSortedLeagues] = React.useState();
 
   React.useEffect(() => {
     const getData = async () => {
       const user = await getUserById(getLoggedInUserId());
+      const fetchedUserLeagues = await getUserLeagues();
+
+      let userLeaguesInArray = user.data.user_leagues;
+      let userLeagues = fetchedUserLeagues.data;
+
+      const arrayOfUsersLeagues = [];
+      userLeaguesInArray.forEach((x) => {
+        arrayOfUsersLeagues.push(
+          userLeagues.find((idNumber) => idNumber.league_id === x)
+        );
+      });
+
       setUser(user.data);
-      console.log(user.data);
+      setSortedLeagues(arrayOfUsersLeagues);
+      console.log(userLeagues);
     };
+
     getData();
   }, []);
-
-  React.useEffect(() => {
-    const getData = async () => {
-      const userLeagues = await getUserLeagues();
-      const emptystring = '';
-
-      console.log('userleagues', userLeagues.data[1].league_name);
-      console.log('userleaguesspread', ...userLeagues.data);
-      const populatedstring = (emptystring, { ...userLeagues.data });
-      setUserLeagues(populatedstring);
-      console.log('populates', populatedstring);
-    };
-    getData();
-  }, []);
-
-  console.log('user', user);
 
   return (
     <section className="hero is-fullheight-with-navbar is-info">
       <div className="has-background-info p-4 mb-4">
         <div className="columns py-2">
-          <div className="column is-6">
+          <div className="column is-8">
             <p className="title">
-              <i className="fa-solid fa-trophy"></i>: {user.user_leagues}
+              <i className="fa-solid fa-trophy"></i>: {user.username}'s Leagues
             </p>
-            {/* <p className="title">{userLeagues}</p> */}
+            {!sortedLeagues ? (
+              <p>Loading...</p>
+            ) : (
+              sortedLeagues.map((league) => (
+                <LeagueCard key={league.league_name} {...league} />
+              ))
+            )}
           </div>
         </div>
       </div>
