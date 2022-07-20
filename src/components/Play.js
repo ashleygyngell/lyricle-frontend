@@ -1,8 +1,7 @@
 import React from 'react';
 import { getLyrics, getSong } from 'genius-lyrics-api';
-import { getKendrick, scrapeLyrics } from '../lib/geniusapi';
+import { getKendrick } from '../lib/geniusapi';
 import { getLyricsFromAPI } from '../lib/api.js';
-import { autoCorrectSong } from '../lib/spotifyapi.js';
 import axios from 'axios';
 
 let i = 0;
@@ -18,6 +17,10 @@ const Play = () => {
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
   const [submittedGuess, setSubmittedGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('');
+  const [searchForArtist, setSearchForArtist] = React.useState('Adele');
+  const [searchArtistURI, setSearchArtistURI] = React.useState('');
+  const [fullSongInfo, setFullSongInfo] = React.useState('');
+  const [kendrikInfo, setkendrikInfo] = React.useState('');
 
   // const guessAutoCorrect = {
   //   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
@@ -35,14 +38,19 @@ const Play = () => {
   };
 
   React.useEffect(() => {
+    setSearchForArtist('Adele');
+
     document.getElementById('clue_clicker').disabled = 'disabled';
     document.getElementById('clue_clicker').style.background = 'grey';
     document.getElementById('clue_clicker').innerText = 'loading lyricle';
 
     const getData = async () => {
       try {
-        const { data } = await getKendrick();
-        setkendrikinfo(data.response.hits);
+        const { data } = await getKendrick(searchForArtist);
+        setkendrikInfo(data.response.hits[2].result);
+        console.log('KENDRIK INFO', kendrikInfo);
+        setFullSongInfo(data.response.hits[2].result);
+        console.log(data.response);
         setSongTitle(data.response.hits[2].result.title);
         setArtistName(data.response.hits[2].result.artist_names);
         console.log(
@@ -61,42 +69,17 @@ const Play = () => {
       }
     };
 
-    const options = {
-      method: 'GET',
-      url: 'https://spotify81.p.rapidapi.com/search',
-      params: {
-        q: `${guess},
-        ${artistName}`,
-        type: 'multi',
-        offset: '0',
-        limit: '10',
-        numberOfTopResults: '5',
-      },
-      headers: {
-        'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
-        'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
-      },
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        setAutoCorectGuess(response.data.tracks[0].data.name);
-        console.log('autocorrectguess', autoCorrectGuess);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-
     const disabledValue = document.getElementById('clue_clicker');
-    getData().then(
-      // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
+    getData()
+      .then(setScrapedLyrics())
+      .then(
+        // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
 
-      disabledValue.removeAttribute('disabled'),
-      (document.getElementById('clue_clicker').style.background =
-        'rgb(169, 169, 169)'),
-      (document.getElementById('clue_clicker').innerText = 'clue')
-    );
+        disabledValue.removeAttribute('disabled'),
+        (document.getElementById('clue_clicker').style.background =
+          'rgb(169, 169, 169)'),
+        (document.getElementById('clue_clicker').innerText = 'clue')
+      );
 
     setInterval(function time() {
       const d = new Date();
@@ -114,49 +97,80 @@ const Play = () => {
     }, 1000);
   }, []);
 
-  const checkGuessForData = async () => {
-    try {
-      const data = await autoCorrectSong();
-      setAutoCorectGuess(data);
-      console.log('DATAFORCORRECT', autocorrectGuess);
-    } catch (err) {
-      console.log(err);
-    }
+  function autoCorrectTheGuess() {
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log('autocorrectguess', response.data.tracks[0].data.name);
+        setSubmittedGuess(response.data.tracks[0].data.name);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  function getArtist() {
+    const searchOptions = {
+      method: 'GET',
+      url: 'https://spotify81.p.rapidapi.com/search',
+      params: {
+        q: `${searchForArtist}`,
+        type: 'multi',
+        offset: '0',
+        limit: '10',
+        numberOfTopResults: '5',
+      },
+      headers: {
+        'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
+        'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
+      },
+    };
+
+    axios
+      .request(searchOptions)
+      .then(function (response) {
+        console.log(
+          'THISSHOULDBEARTIST',
+          response.data.artists.items[0].data.profile.name,
+          response.data.artists.items[0].data
+        );
+        const artistURI = response.data.artists.items[0].data.uri;
+        setSearchArtistURI(artistURI.split('artist:')[1]);
+        console.log('searchURI', searchArtistURI);
+        if (artistURI !== '') {
+          console.log(getKendrick());
+        } else {
+          console.log('FATALERROR');
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  const options = {
+    method: 'GET',
+    url: 'https://spotify81.p.rapidapi.com/search',
+    params: {
+      q: `${guess},
+        ${artistName}`,
+      type: 'multi',
+      offset: '0',
+      limit: '10',
+      numberOfTopResults: '5',
+    },
+    headers: {
+      'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
+      'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
+    },
   };
 
   function checkGuess() {
-    const guessField = document.getElementById('guess_field').value;
-    let shake = document.getElementById('guesstext');
-
-    if (guessField == songTitle) {
-      console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
-      document.getElementById('guesstext').style.color = '#FFFF00';
-
-      shake.classList.toggle('shakeSuccess');
-      document.getElementById('guess_field').readOnly = true;
-      const disabledValue = document.getElementById('clue_clicker');
-
-      // const disabledValue = document.getElementById('clue_clicker');
-
-      // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
-
-      disabledValue.setAttribute('class', 'disabled'),
-        (document.getElementById('clue_clicker').style.background = 'grey'),
-        (document.getElementById('clue_clicker').innerText = '');
-
-      // setTimeout(function () {
-      //   shake.classList.toggle('shakeSuccess'), 1001;
-      // });
-    } else {
-      setTimeout(function () {
-        shake.classList.toggle('shake');
-      }, 1000);
-      setTimeout(function () {
-        shake.classList.toggle('shake'), 1001;
-      });
-      // document.getElementById('guesstext').classList.toggle('shake');
-      document.getElementById('guesstext').style.color = '#ff0000';
-    }
+    getArtist();
+    let guessField = document.getElementById('guess_field').value;
+    setGuess(guessField);
+    console.log('GUESSFIELD', guess, artistName);
+    autoCorrectTheGuess();
   }
 
   function click() {
@@ -303,62 +317,99 @@ const Play = () => {
   //   );
   // }
 
+  let shake = document.getElementById('guesstext');
+
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
     const newGuess = document.getElementById('guess_field').value;
     setGuess(newGuess);
     if (event.key === 'Enter') {
-      setSubmittedGuess(newGuess);
       checkGuess();
       document.getElementById('guess_field').value = '';
       //This part of the function checks to see if the submitted answer matches the song title.
-      if (guess == songTitle) {
-        console.log('WIN');
-      } else if (guess !== songTitle && i <= 4) {
+      if (submittedGuess == songTitle) {
+        console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
+        document.getElementById('guesstext').style.color = '#FFFF00';
+        shake.classList.toggle('shakeSuccess');
+        document.getElementById('guess_field').readOnly = true;
+        const disabledValue = document.getElementById('clue_clicker');
+
+        // const disabledValue = document.getElementById('clue_clicker');
+
+        // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
+
+        disabledValue.setAttribute('class', 'disabled'),
+          (document.getElementById('clue_clicker').style.background = 'grey'),
+          (document.getElementById('clue_clicker').innerText = '');
+        document.getElementById('song-info').style.display = 'block';
+
+        // setTimeout(function () {
+        //   shake.classList.toggle('shakeSuccess'), 1001;
+        // });
+      } else if (submittedGuess !== songTitle && i <= 4) {
         click();
+        setTimeout(function () {
+          shake.classList.toggle('shake');
+        }, 1000);
+        setTimeout(function () {
+          shake.classList.toggle('shake'), 1001;
+        });
+        // document.getElementById('guesstext').classList.toggle('shake');
+        document.getElementById('guesstext').style.color = '#ff0000';
       } else {
         console.log('No More Guesses');
       }
     }
   };
 
-  const [kendrikinfo, setkendrikinfo] = React.useState(null);
-
   return (
     <section className="hero is-fullheight-with-navbar is-success">
       <div className="hero-body">
         <div className="container">
           <div className="columns is-mobile is-multiline is-centered">
-            <input
-              type="text"
-              className="clue_field has-text-centered is-half"
-              value={clue1}
-              readOnly
-            />
-            <input
-              type="text"
-              className="clue_field has-text-centered"
-              value={clue2}
-              readOnly
-            />
-            <input
-              type="text"
-              className="clue_field has-text-centered"
-              value={clue3}
-              readOnly
-            />
-            <input
-              type="text"
-              className="clue_field has-text-centered"
-              value={clue4}
-              readOnly
-            />
-            <input
-              type="text"
-              className="clue_field has-text-centered"
-              value={clue5}
-              readOnly
-            />
+            <div className="song-info" id="song-info">
+              {!kendrikInfo ? (
+                <p></p>
+              ) : (
+                <>
+                  {' '}
+                  <h1>{kendrikInfo.title}</h1>
+                  <img src={kendrikInfo.song_art_image_thumbnail_url} alt="" />
+                </>
+              )}
+            </div>
+            <div id="clue_fields_wrapper">
+              <input
+                type="text"
+                className="clue_field has-text-centered is-half"
+                value={clue1}
+                readOnly
+              />
+              <input
+                type="text"
+                className="clue_field has-text-centered"
+                value={clue2}
+                readOnly
+              />
+              <input
+                type="text"
+                className="clue_field has-text-centered"
+                value={clue3}
+                readOnly
+              />
+              <input
+                type="text"
+                className="clue_field has-text-centered"
+                value={clue4}
+                readOnly
+              />
+              <input
+                type="text"
+                className="clue_field has-text-centered"
+                value={clue5}
+                readOnly
+              />
+            </div>
             <input
               type="text"
               id="guesstext"

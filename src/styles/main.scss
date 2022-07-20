@@ -82,6 +82,15 @@ font-size: 2.5vw;
   overflow: auto;
 }
 
+.song-info {
+  position: absolute;
+  display: none;
+}
+
+.song-info h1 {
+  text-align: center;
+}
+
 #the-final-countdown {
   display: flex;
   flex-direction: row;
