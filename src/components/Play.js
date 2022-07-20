@@ -3,6 +3,7 @@ import { getLyrics, getSong } from 'genius-lyrics-api';
 import { getKendrick } from '../lib/geniusapi';
 import { getLyricsFromAPI } from '../lib/api.js';
 import axios from 'axios';
+import Spotify from 'react-spotify-embed';
 
 let i = 0;
 let guessedCorrect = false;
@@ -17,10 +18,13 @@ const Play = () => {
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
   const [submittedGuess, setSubmittedGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('');
-  const [searchForArtist, setSearchForArtist] = React.useState('Adele');
+  const [searchForArtist, setSearchForArtist] = React.useState('travis scott');
   const [searchArtistURI, setSearchArtistURI] = React.useState('');
   const [fullSongInfo, setFullSongInfo] = React.useState('');
   const [fetchedSongInfo, setFetchedSongInfo] = React.useState('');
+  const [spotifySongLink, setSpotifySongLink] = React.useState(
+    'https://open.spotify.com/track/'
+  );
 
   // const guessAutoCorrect = {
   //   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
@@ -38,7 +42,7 @@ const Play = () => {
   };
 
   React.useEffect(() => {
-    setSearchForArtist('Adele');
+    setSearchForArtist('Travis Scott');
 
     document.getElementById('clue_clicker').disabled = 'disabled';
     document.getElementById('clue_clicker').style.background = 'grey';
@@ -47,20 +51,20 @@ const Play = () => {
     const getData = async () => {
       try {
         const { data } = await getKendrick(searchForArtist);
-        setFetchedSongInfo(data.response.hits[2].result);
+        setFetchedSongInfo(data.response.hits[0].result);
         console.log('Song INFO', fetchedSongInfo);
-        setFullSongInfo(data.response.hits[2].result);
+        setFullSongInfo(data.response.hits[0].result);
         console.log(data.response);
-        setSongTitle(data.response.hits[2].result.title);
-        setArtistName(data.response.hits[2].result.artist_names);
+        setSongTitle(data.response.hits[0].result.title);
+        setArtistName(data.response.hits[0].result.artist_names);
         console.log(
           'HEYHEYHEY',
-          data.response.hits[2].result.primary_artist.name,
-          data.response.hits[2].result.title
+          data.response.hits[0].result.primary_artist.name,
+          data.response.hits[0].result.title
         );
         const data2 = await getLyricsFromAPI({
-          song_title: data.response.hits[2].result.title,
-          song_artist: data.response.hits[2].result.primary_artist.name,
+          song_title: data.response.hits[0].result.title,
+          song_artist: data.response.hits[0].result.primary_artist.name,
         });
         console.log('SUCCESS', data2.data);
         setScrapedLyrics(data2.data);
@@ -99,10 +103,14 @@ const Play = () => {
 
   function autoCorrectTheGuess() {
     axios
-      .request(options)
+      .request(songSearchOptions)
       .then(function (response) {
-        console.log('autocorrectguess', response.data.tracks[0].data.name);
-        setSubmittedGuess(response.data.tracks[0].data.name);
+        console.log(
+          'autocorrectguess',
+          response.data.tracks.items[0].external_urls.spotify
+        );
+        setSubmittedGuess(response.data.tracks.items[0].name);
+        setSpotifySongLink(response.data.tracks.items[0].external_urls.spotify);
       })
       .catch(function (error) {
         console.error(error);
@@ -131,8 +139,7 @@ const Play = () => {
       .then(function (response) {
         console.log(
           'THISSHOULDBEARTIST',
-          response.data.artists.items[0].data.profile.name,
-          response.data.artists.items[0].data
+          response.data.artists.items[0].data.profile.name
         );
         const artistURI = response.data.artists.items[0].data.uri;
         setSearchArtistURI(artistURI.split('artist:')[1]);
@@ -148,20 +155,29 @@ const Play = () => {
       });
   }
 
-  const options = {
+  // const options = {
+  //   method: 'GET',
+  //   url: 'https://spotify81.p.rapidapi.com/search',
+  //   params: {
+  //     q: `${guess},
+  //       ${artistName}`,
+  //     type: 'multi',
+  //     offset: '0',
+  //     limit: '10',
+  //     numberOfTopResults: '5',
+  //   },
+  //   headers: {
+  //     'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
+  //     'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
+  //   },
+  // };
+
+  const songSearchOptions = {
     method: 'GET',
-    url: 'https://spotify81.p.rapidapi.com/search',
-    params: {
-      q: `${guess},
-        ${artistName}`,
-      type: 'multi',
-      offset: '0',
-      limit: '10',
-      numberOfTopResults: '5',
-    },
+    url: `https://api.spotify.com/v1/search?q=track%3A${guess}%2Bartist%3A${artistName}&type=track&market=ES&limit=10&offset=0`,
     headers: {
-      'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
-      'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
+      authorization:
+        'Bearer BQAjWR_Fbyxa6Ql-nCZA7lcF7eiu6zWA8dIT6nW-TE-5xPJkU0WfQO6HBuN9RwGVgJpCVXHhh_KiX6AY906DoS0JwzyXGfLRbNVEb8EHe_fnqK7o9gdpgOheRbBmxxHP2oUwt5VufHqwCb7F1bcA0qOnW6POzbm4CPjyjcQH0nsaXQ',
     },
   };
 
@@ -324,6 +340,7 @@ const Play = () => {
     const newGuess = document.getElementById('guess_field').value;
     setGuess(newGuess);
     if (event.key === 'Enter') {
+      document.body.scrollTop;
       checkGuess();
       document.getElementById('guess_field').value = '';
       //This part of the function checks to see if the submitted answer matches the song title.
@@ -432,7 +449,7 @@ const Play = () => {
                 </>
               )}
             </div>
-
+            <Spotify wide link={spotifySongLink} />
             <input
               type="text"
               id="guess_field"

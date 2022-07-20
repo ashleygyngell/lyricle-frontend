@@ -35,7 +35,6 @@ background-image: linear-gradient(to bottom ,rgb(10, 13, 84) ,rgb(10, 13, 84), #
 }
 
 .clue_field {
-  font-size: 2.5vw;
   color: white;
   width: 100%;
   max-width: 90vw;
@@ -50,10 +49,11 @@ background-image: linear-gradient(to bottom ,rgb(10, 13, 84) ,rgb(10, 13, 84), #
   box-sizing: border-box;
   resize: vertical;
   overflow: auto;
+  font-size: 4vw;
 }
 
 .guess_typed_field {
-font-size: 2.5vw;
+font-size: 4vw;
   color: white;
   width: 100%;
   max-width: 70vw;
@@ -71,7 +71,7 @@ font-size: 2.5vw;
 }
 
 .guess_rendered_field {
-font-size: 2.5vw;
+font-size: 4vw;
   color: white;
   width: 100%;
   max-width: 90vw;
