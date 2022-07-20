@@ -20,7 +20,7 @@ const Play = () => {
   const [searchForArtist, setSearchForArtist] = React.useState('Adele');
   const [searchArtistURI, setSearchArtistURI] = React.useState('');
   const [fullSongInfo, setFullSongInfo] = React.useState('');
-  const [kendrikInfo, setkendrikInfo] = React.useState('');
+  const [fetchedSongInfo, setFetchedSongInfo] = React.useState('');
 
   // const guessAutoCorrect = {
   //   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
@@ -47,8 +47,8 @@ const Play = () => {
     const getData = async () => {
       try {
         const { data } = await getKendrick(searchForArtist);
-        setkendrikInfo(data.response.hits[2].result);
-        console.log('KENDRIK INFO', kendrikInfo);
+        setFetchedSongInfo(data.response.hits[2].result);
+        console.log('Song INFO', fetchedSongInfo);
         setFullSongInfo(data.response.hits[2].result);
         console.log(data.response);
         setSongTitle(data.response.hits[2].result.title);
@@ -318,7 +318,7 @@ const Play = () => {
   // }
 
   let shake = document.getElementById('guesstext');
-
+  let renderSongInfo = document.getElementById('song-info');
   // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
     const newGuess = document.getElementById('guess_field').value;
@@ -329,8 +329,11 @@ const Play = () => {
       //This part of the function checks to see if the submitted answer matches the song title.
       if (submittedGuess == songTitle) {
         console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
-        document.getElementById('guesstext').style.color = '#FFFF00';
+        document.getElementById('guesstext').style.color = 'outdoorsgreen';
+        // document.getElementById('guesstext').style.background = 'darkgrey';
+        document.getElementById('guesstext').style.width = 'auto';
         shake.classList.toggle('shakeSuccess');
+
         document.getElementById('guess_field').readOnly = true;
         const disabledValue = document.getElementById('clue_clicker');
 
@@ -342,6 +345,8 @@ const Play = () => {
           (document.getElementById('clue_clicker').style.background = 'grey'),
           (document.getElementById('clue_clicker').innerText = '');
         document.getElementById('song-info').style.display = 'block';
+
+        renderSongInfo.classList.toggle('shakeSuccess');
 
         // setTimeout(function () {
         //   shake.classList.toggle('shakeSuccess'), 1001;
@@ -367,17 +372,6 @@ const Play = () => {
       <div className="hero-body">
         <div className="container">
           <div className="columns is-mobile is-multiline is-centered">
-            <div className="song-info" id="song-info">
-              {!kendrikInfo ? (
-                <p></p>
-              ) : (
-                <>
-                  {' '}
-                  <h1>{kendrikInfo.title}</h1>
-                  <img src={kendrikInfo.song_art_image_thumbnail_url} alt="" />
-                </>
-              )}
-            </div>
             <div id="clue_fields_wrapper">
               <input
                 type="text"
@@ -410,6 +404,17 @@ const Play = () => {
                 readOnly
               />
             </div>
+
+            <div className="song-info" id="song-info">
+              {!fetchedSongInfo ? (
+                <p></p>
+              ) : (
+                <>
+                  {' '}
+                  <img src={fetchedSongInfo.song_art_image_url} alt="" />
+                </>
+              )}
+            </div>
             <input
               type="text"
               id="guesstext"
@@ -417,6 +422,16 @@ const Play = () => {
               value={submittedGuess}
               readOnly
             />
+            <div className="song-info" id="song-info">
+              {!fetchedSongInfo ? (
+                <p></p>
+              ) : (
+                <>
+                  {' '}
+                  <p>{fetchedSongInfo.release_date_for_display}</p>
+                </>
+              )}
+            </div>
 
             <input
               type="text"
@@ -425,6 +440,7 @@ const Play = () => {
               onKeyDown={handleKeyDownOnTextField}
             />
           </div>
+
           <div id="keyboard">
             <div className="row">
               <button id="giveup_clicker" onClick={giveup}>

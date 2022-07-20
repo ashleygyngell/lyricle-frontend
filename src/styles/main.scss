@@ -5,6 +5,10 @@ $info: $outdoorsgreen;
 
 @import '~bulma/bulma.sass';
 
+html, body {
+  overflow-x: hidden;
+}
+
 .sample {
   box-sizing: border-box;
   display: block;
@@ -20,11 +24,13 @@ $info: $outdoorsgreen;
 
 body {
   background-color: #fcfcfc;
-  
+position: relative;
 }
 
-.hero-body {
-margin-top: -40px;
+
+
+.hero {
+display: block;
 background-image: linear-gradient(to bottom ,rgb(10, 13, 84) ,rgb(10, 13, 84), #0f127a)
 }
 
@@ -72,23 +78,30 @@ font-size: 2.5vw;
   height: 3vh;
   background-color: transparent;
   border: none;
-  padding: 25px;
+  padding: 5px;
   // border-radius: 3px;
   box-shadow: none;
   outline: none;
-  margin: 8px;
+  margin: 2px;
   box-sizing: border-box;
   resize: vertical;
   overflow: auto;
 }
 
 .song-info {
-  position: absolute;
+  // position: relative;
   display: none;
+  height: 1vh;
+  z-index: 1;
+  text-align: center;
 }
 
-.song-info h1 {
-  text-align: center;
+.columns {
+  margin-top: -2rem;
+}
+
+.song-info img{
+  width: auto;
 }
 
 #the-final-countdown {
@@ -205,6 +218,8 @@ button.is-ghost:hover {
   transform:scale(1.6)
   
 }
+
+
 
 @keyframes shakeSuccess {
   0% {
