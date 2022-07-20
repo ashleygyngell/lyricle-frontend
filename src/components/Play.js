@@ -78,7 +78,7 @@ const Play = () => {
         disabledValue.removeAttribute('disabled'),
         (document.getElementById('clue_clicker').style.background =
           'rgb(169, 169, 169)'),
-        (document.getElementById('clue_clicker').innerText = 'clue')
+        (document.getElementById('clue_clicker').innerText = 'more lyrics')
       );
 
     setInterval(function time() {
