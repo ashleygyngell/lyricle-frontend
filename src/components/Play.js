@@ -7,31 +7,27 @@ import Spotify from 'react-spotify-embed';
 
 let i = 0;
 let guessedCorrect = false;
-
+let x = 0;
 const Play = () => {
   const [clue5, setClue5] = React.useState('?');
   const [clue4, setClue4] = React.useState('?');
   const [clue3, setClue3] = React.useState('?');
   const [clue2, setClue2] = React.useState('?');
-  const [clue1, setClue1] = React.useState('?');
+  const [clue1, setClue1] = React.useState(
+    'Loading... You might have to refresh page'
+  );
   const [guess, setGuess] = React.useState('');
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
   const [submittedGuess, setSubmittedGuess] = React.useState('');
+  const [correctGuess, setCorrectGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('');
-  const [searchForArtist, setSearchForArtist] = React.useState('travis scott');
+  const [searchForArtist, setSearchForArtist] = React.useState('ABBA');
   const [searchArtistURI, setSearchArtistURI] = React.useState('');
   const [fullSongInfo, setFullSongInfo] = React.useState('');
   const [fetchedSongInfo, setFetchedSongInfo] = React.useState('');
   const [spotifySongLink, setSpotifySongLink] = React.useState(
     'https://open.spotify.com/track/'
   );
-
-  // const guessAutoCorrect = {
-  //   apiKey: '4wX_AIcVI8fQHIbkWY8z95hKj_23o_04j8FOVD79b-1g_m2GXuYzyfC7pHRDoacU',
-  //   title: { guess },
-  //   artist: { artistName },
-  //   optimizeQuery: true,
-  // };
 
   const [scrapedLyrics, setScrapedLyrics] = React.useState(null);
   const [songTitle, setSongTitle] = React.useState(null);
@@ -40,50 +36,55 @@ const Play = () => {
     song_title: `${songTitle}`,
     song_artist: `${artistName}`,
   };
+  let shake = document.getElementById('guesstext');
+  let renderSongInfo = document.getElementById('song-info');
 
-  React.useEffect(() => {
-    setSearchForArtist('Travis Scott');
-
-    document.getElementById('clue_clicker').disabled = 'disabled';
-    document.getElementById('clue_clicker').style.background = 'grey';
-    document.getElementById('clue_clicker').innerText = 'loading lyricle';
-
-    const getData = async () => {
-      try {
-        const { data } = await getKendrick(searchForArtist);
-        setFetchedSongInfo(data.response.hits[0].result);
-        console.log('Song INFO', fetchedSongInfo);
-        setFullSongInfo(data.response.hits[0].result);
-        console.log(data.response);
-        setSongTitle(data.response.hits[0].result.title);
-        setArtistName(data.response.hits[0].result.artist_names);
-        console.log(
-          'HEYHEYHEY',
-          data.response.hits[0].result.primary_artist.name,
-          data.response.hits[0].result.title
-        );
-        const data2 = await getLyricsFromAPI({
-          song_title: data.response.hits[0].result.title,
-          song_artist: data.response.hits[0].result.primary_artist.name,
-        });
-        console.log('SUCCESS', data2.data);
-        setScrapedLyrics(data2.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
+  async function getSongData() {
     const disabledValue = document.getElementById('clue_clicker');
-    getData()
-      .then(setScrapedLyrics())
-      .then(
+    try {
+      const { data } = await getKendrick(searchForArtist).then(
         // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
 
         disabledValue.removeAttribute('disabled'),
         (document.getElementById('clue_clicker').style.background =
           'rgb(169, 169, 169)'),
-        (document.getElementById('clue_clicker').innerText = 'more lyrics')
+        (document.getElementById('clue_clicker').innerText = 'START LYRICLE')
       );
+      setFetchedSongInfo(data.response.hits[x].result);
+      console.log('Song INFO', fetchedSongInfo);
+      setFullSongInfo(data.response.hits[x].result);
+      console.log(data.response);
+      setSongTitle(data.response.hits[x].result.title);
+      setArtistName(data.response.hits[x].result.artist_names);
+      console.log(
+        'HEYHEYHEY',
+        data.response.hits[x].result.primary_artist.name,
+        data.response.hits[x].result.title
+      );
+      const data2 = await getLyricsFromAPI({
+        song_title: data.response.hits[x].result.title,
+        song_artist: data.response.hits[x].result.primary_artist.name,
+      });
+      console.log('SUCCESS', data2.data);
+      setScrapedLyrics(data2.data);
+      if (scrapedLyrics != '') {
+        setClue1(`Click 'Start Lyricle'`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  React.useEffect(() => {
+    document.getElementById('clue_clicker').disabled = 'disabled';
+    document.getElementById('giveup_clicker').disabled = 'disabled';
+    document.getElementById('giveup_clicker').style.background = 'grey';
+    document.getElementById('clue_clicker').style.background = 'grey';
+    document.getElementById('clue_clicker').innerText = 'loading lyricle';
+
+    getSongData();
+
+    // getData()
 
     setInterval(function time() {
       const d = new Date();
@@ -101,20 +102,123 @@ const Play = () => {
     }, 1000);
   }, []);
 
+  const clueClicker = document.getElementById('clue_clicker');
+
+  React.useEffect(() => {
+    if (autoCorrectGuess == songTitle || guess == songTitle) {
+      clueClicker.addEventListener('click', resetLyricle);
+      document.getElementById('clue_clicker').innerText = 'next song';
+      console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
+      document.getElementById('guesstext').style.color = 'gold';
+      // document.getElementById('guesstext').style.background = 'darkgrey';
+      document.getElementById('guesstext').style.width = 'auto';
+      shake.classList.toggle('shakeSuccess');
+
+      // const disabledValue = document.getElementById('clue_clicker');
+      // disabledValue.setAttribute('class', 'disabled'),
+      (document.getElementById('clue_clicker').style.background = 'dark grey'),
+        (document.getElementById('song-info').style.display = 'flex');
+      renderSongInfo.classList.toggle('shakeSuccess');
+      console.log('x', x);
+    } else if (autoCorrectGuess !== songTitle && i <= 4) {
+      setTimeout(function () {
+        shake.classList.toggle('shake');
+      }, 1000);
+      setTimeout(function () {
+        shake.classList.toggle('shake'), 1001;
+      });
+      // document.getElementById('guesstext').classList.toggle('shake');
+      document.getElementById('guesstext').style.color = '#ff0000';
+    }
+  }, [correctGuess]);
+
   function autoCorrectTheGuess() {
     axios
-      .request(songSearchOptions)
+      .request(options)
       .then(function (response) {
+        console.log('autocorrectguess', response.data);
+        setSubmittedGuess(response.data.tracks[0].data.name);
+        setAutoCorectGuess(response.data.tracks[0].data.name);
+        setCorrectGuess(response.data.tracks[0].data.name);
         console.log(
-          'autocorrectguess',
-          response.data.tracks.items[0].external_urls.spotify
+          'THIS IS WHAT SHOULD BE THE AUTOCORRECT GUESS',
+          autoCorrectGuess
         );
-        setSubmittedGuess(response.data.tracks.items[0].name);
-        setSpotifySongLink(response.data.tracks.items[0].external_urls.spotify);
       })
       .catch(function (error) {
         console.error(error);
       });
+  }
+
+  function getSpotifySongLink() {
+    axios
+      .request(songSearchOptions)
+      .then(function (response) {
+        console.log(
+          'spotifysonglink',
+          response.data.tracks.items[0].external_urls.spotify
+        );
+        setSpotifySongLink(response.data.tracks.items[0].external_urls.spotify);
+      })
+
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  const getSongs = async () => {
+    i = -1;
+    if (x == 2) {
+      x = 4;
+    }
+    document.getElementById('clue_clicker').innerText = 'getting lyrics';
+    console.log('x is now=', x);
+    try {
+      const { data } = await getKendrick(searchForArtist).then(
+        (document.getElementById('clue_clicker').innerText = 'more lyrics?')
+      );
+      setFetchedSongInfo(data.response.hits[x].result);
+      console.log('New Song INFO', searchForArtist, getKendrick, data.response);
+      setFullSongInfo(data.response.hits[x].result);
+      console.log(data.response);
+      setSongTitle(data.response.hits[x].result.title);
+      setArtistName(data.response.hits[x].result.artist_names);
+      console.log(
+        'HEYHEYHEY',
+        data.response.hits[x].result.primary_artist.name,
+        data.response.hits[x].result.title
+      );
+      const data2 = await getLyricsFromAPI({
+        song_title: data.response.hits[x].result.title,
+        song_artist: data.response.hits[x].result.primary_artist.name,
+      });
+
+      console.log('SUCCESS', data2.data);
+      setScrapedLyrics(data2.data);
+      if (scrapedLyrics != '') {
+        setClue1('Click more lyrics...');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  function resetLyricle() {
+    console.log('YAS BITCh');
+    setClue1('Loading...');
+    setClue2('?');
+    setClue3('?');
+    setClue4('?');
+    setClue5('?');
+    setGuess('');
+    setSubmittedGuess('');
+    i = 0;
+
+    setScrapedLyrics('');
+    clueClicker.removeEventListener('click', resetLyricle);
+    x++;
+    getSongs();
+    document.getElementById('song-info').style.display = 'none';
   }
 
   function getArtist() {
@@ -129,7 +233,7 @@ const Play = () => {
         numberOfTopResults: '5',
       },
       headers: {
-        'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
+        'X-RapidAPI-Key': '6d722cd7d3msha3ef33382ba2326p13605ajsne131a1188a7b',
         'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
       },
     };
@@ -155,29 +259,29 @@ const Play = () => {
       });
   }
 
-  // const options = {
-  //   method: 'GET',
-  //   url: 'https://spotify81.p.rapidapi.com/search',
-  //   params: {
-  //     q: `${guess},
-  //       ${artistName}`,
-  //     type: 'multi',
-  //     offset: '0',
-  //     limit: '10',
-  //     numberOfTopResults: '5',
-  //   },
-  //   headers: {
-  //     'X-RapidAPI-Key': '28fa7e1d77msh4969210312af748p13f318jsn62715d1354c9',
-  //     'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
-  //   },
-  // };
+  const options = {
+    method: 'GET',
+    url: 'https://spotify81.p.rapidapi.com/search',
+    params: {
+      q: `${guess},
+        ${artistName}`,
+      type: 'multi',
+      offset: '0',
+      limit: '10',
+      numberOfTopResults: '5',
+    },
+    headers: {
+      'X-RapidAPI-Key': '6d722cd7d3msha3ef33382ba2326p13605ajsne131a1188a7b',
+      'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
+    },
+  };
 
   const songSearchOptions = {
     method: 'GET',
     url: `https://api.spotify.com/v1/search?q=track%3A${guess}%2Bartist%3A${artistName}&type=track&market=ES&limit=10&offset=0`,
     headers: {
       authorization:
-        'Bearer BQAjWR_Fbyxa6Ql-nCZA7lcF7eiu6zWA8dIT6nW-TE-5xPJkU0WfQO6HBuN9RwGVgJpCVXHhh_KiX6AY906DoS0JwzyXGfLRbNVEb8EHe_fnqK7o9gdpgOheRbBmxxHP2oUwt5VufHqwCb7F1bcA0qOnW6POzbm4CPjyjcQH0nsaXQ',
+        'Bearer BQBgDky9r3CAsSBjqgGNOxewwjaRvxhZ7r9IniakNP28tpb8zc4xiFiZ78_s48ROrfLce_lEvqL14mhOirfJ0WEsnrl4LVg3thA3TqDShMhxZRmiJFTGcsyoO6pWmv2_JJsXDE-akXjdfVuWN4x3OjrLJNCrTpdjkg1TA7LU-8PT6w',
     },
   };
 
@@ -187,20 +291,30 @@ const Play = () => {
     setGuess(guessField);
     console.log('GUESSFIELD', guess, artistName);
     autoCorrectTheGuess();
+    getSpotifySongLink();
   }
 
   function click() {
     i++;
     console.log(i);
 
+    const returnSevenWordsAfterFourteen = (s) =>
+      s.split(/[]/)[0].split(' ').slice(14, 21).join(' ');
+    const returnSevenWordsAfterSeven = (s) =>
+      s.split(/[]/)[0].split(' ').slice(7, 14).join(' ');
     const returnSevenWords = (s) =>
-      s.split(/[.?!]/)[0].split(' ').slice(0, 7).join(' ');
+      s.split(/[]/)[0].split(' ').slice(0, 7).join(' ');
     const returnFiveWords = (s) =>
-      s.split(/[.?!]/)[0].split(' ').slice(0, 5).join(' ');
+      s.split(/[]/)[0].split(' ').slice(0, 5).join(' ');
     const returnThreeWords = (s) =>
-      s.split(/[.?!]/)[0].split(' ').slice(0, 5).join(' ');
+      s.split(/[]/)[0].split(' ').slice(0, 5).join(' ');
     const returnFourtyWords = (s) =>
-      s.split(/[.?!]/)[0].split(' ').slice(0, 40).join(' ');
+      s.split(/[]/)[0].split(' ').slice(0, 40).join(' ');
+
+    const returnThirtyWords = (s) =>
+      s.split(/[]/)[0].split(' ').slice(0, 30).join(' ');
+    const returnFiveWordsWithAllSymbols = (s) =>
+      s.split(/[]/)[0].split(' ').slice(0, 5).join(' ');
 
     const lyricsString = scrapedLyrics;
 
@@ -222,8 +336,48 @@ const Play = () => {
           .replace(/\r?\n|\r/g, ' ')
           .toLowerCase();
         setClue1(SevenWordsafter);
+      } else if (lyricsString.includes('Verse 3')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 3'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterFourteen(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue1(SevenWordsafter);
+      } else if (lyricsString.includes('Verse 2')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 2'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterFourteen(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue1(SevenWordsafter);
+      } else if (lyricsString.includes('Verse 1')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 1'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterFourteen(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue1(SevenWordsafter);
+      } else if (lyricsString.includes('Verse')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterFourteen(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue1(SevenWordsafter);
       } else {
-        const NoClue = 'Song doesnt contain this clue!';
+        const NoClue = 'Unlucky 🤪 Song doesnt contain this clue!';
         setClue1(NoClue);
       }
     }
@@ -239,8 +393,38 @@ const Play = () => {
           .replace(/\r?\n|\r/g, ' ')
           .toLowerCase();
         setClue2(SevenWordsafter);
+      } else if (lyricsString.includes('Verse 2')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 2'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterSeven(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue2(SevenWordsafter);
+      } else if (lyricsString.includes('Verse 1')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 1'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterSeven(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue2(SevenWordsafter);
+      } else if (lyricsString.includes('Verse')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterSeven(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue2(SevenWordsafter);
       } else {
-        const NoClue = 'Song doesnt contain this clue!';
+        const NoClue = 'Unlucky 🤪 Song doesnt contain this clue!';
         setClue2(NoClue);
       }
     }
@@ -256,8 +440,28 @@ const Play = () => {
           .replace(/\r?\n|\r/g, ' ')
           .toLowerCase();
         setClue3(SevenWordsafter);
+      } else if (lyricsString.includes('Verse 1')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse 1'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterSeven(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue3(SevenWordsafter);
+      } else if (lyricsString.includes('Verse')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Verse'))
+        );
+        const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue3(SevenWordsafter);
       } else {
-        const NoClue = 'Song Doesnt Contain this clue!';
+        const NoClue = 'Unlucky 🤪 Song doesnt contain this clue!';
         setClue3(NoClue);
       }
     }
@@ -267,7 +471,18 @@ const Play = () => {
         const AfterEndingBracket = returnFourtyWords(
           lyricsString.substring(lyricsString.indexOf('Verse 1'))
         );
+        console.log('PROBLEM AREA', AfterEndingBracket);
         const SevenWordsafter = returnSevenWords(
+          AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
+        )
+          .replace(/\r?\n|\r/g, ' ')
+          .toLowerCase();
+        setClue4(SevenWordsafter);
+      } else if (lyricsString.includes('Intro')) {
+        const AfterEndingBracket = returnFourtyWords(
+          lyricsString.substring(lyricsString.indexOf('Intro'))
+        );
+        const SevenWordsafter = returnSevenWordsAfterSeven(
           AfterEndingBracket.substring(AfterEndingBracket.indexOf(']') + 1)
         )
           .replace(/\r?\n|\r/g, ' ')
@@ -275,7 +490,7 @@ const Play = () => {
         setClue4(SevenWordsafter);
       } else {
         console.log('Song doesnt contain Verse 1!');
-        const NoClue = 'Song doesnt contain this clue!';
+        const NoClue = 'Unlucky 🤪 Song doesnt contain this clue!';
         setClue4(NoClue);
       }
     }
@@ -303,13 +518,18 @@ const Play = () => {
         setClue5(SevenWordsafter);
       } else if (!lyricsString.includes('Chorus')) {
         console.log('Song doesnt contain Chorus!');
-        const NoClue = 'Song doesnt contain this clue!';
+        const NoClue = 'Unlucky 🤪 Song doesnt seem to have a chorus!';
         setClue5(NoClue);
+      } else {
+        console.log('no more lyrics');
       }
 
-      document.getElementById('clue_clicker').disabled = 'disabled';
+      // document.getElementById('clue_clicker').disabled = 'disabled';
       document.getElementById('clue_clicker').style.background = 'grey';
-      document.getElementById('clue_clicker').innerText = '';
+      document.getElementById('clue_clicker').innerText = 'No More Clues';
+      const disabledGiveupClicker = document.getElementById('giveup_clicker');
+      disabledGiveupClicker.style.background = 'darkgrey';
+      disabledGiveupClicker.removeAttribute('disabled');
 
       // const button = document.getElementById('clue_clicker');
       // button.parentNode.removeChild(button);
@@ -317,58 +537,34 @@ const Play = () => {
   }
 
   function giveup() {
-    console.log('giveup');
+    document.getElementById('clue_clicker').innerText = songTitle;
   }
 
-  // !THIS NEEDS UPDATING AS STATE ISSUE
-
-  // function AutocorrectSong() {
-  //   getSong(guessAutoCorrect).then((song) =>
-  //     console.log(
-  //       'this is the autocorrected song title',
-  //       `
-  //     ${song.title}
-  //     `
-  //     )
-  //   );
-  // }
-
-  let shake = document.getElementById('guesstext');
-  let renderSongInfo = document.getElementById('song-info');
-  // Event Listener For Enter Key On Text Field.
   const handleKeyDownOnTextField = (event) => {
     const newGuess = document.getElementById('guess_field').value;
     setGuess(newGuess);
+
     if (event.key === 'Enter') {
+      console.log('guess', guess);
       document.body.scrollTop;
       checkGuess();
       document.getElementById('guess_field').value = '';
       //This part of the function checks to see if the submitted answer matches the song title.
-      if (submittedGuess == songTitle) {
-        console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
-        document.getElementById('guesstext').style.color = 'outdoorsgreen';
-        // document.getElementById('guesstext').style.background = 'darkgrey';
-        document.getElementById('guesstext').style.width = 'auto';
-        shake.classList.toggle('shakeSuccess');
-
-        document.getElementById('guess_field').readOnly = true;
-        const disabledValue = document.getElementById('clue_clicker');
-
+      if (autoCorrectGuess == songTitle) {
+        // console.log('CORRECT THE SONG WAS', songTitle, 'you scored', i);
+        // document.getElementById('guesstext').style.color = 'outdoorsgreen';
+        // // document.getElementById('guesstext').style.background = 'darkgrey';
+        // document.getElementById('guesstext').style.width = 'auto';
+        // shake.classList.toggle('shakeSuccess');
+        // document.getElementById('guess_field').readOnly = true;
         // const disabledValue = document.getElementById('clue_clicker');
-
-        // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
-
-        disabledValue.setAttribute('class', 'disabled'),
-          (document.getElementById('clue_clicker').style.background = 'grey'),
-          (document.getElementById('clue_clicker').innerText = '');
-        document.getElementById('song-info').style.display = 'block';
-
-        renderSongInfo.classList.toggle('shakeSuccess');
-
-        // setTimeout(function () {
-        //   shake.classList.toggle('shakeSuccess'), 1001;
-        // });
-      } else if (submittedGuess !== songTitle && i <= 4) {
+        // disabledValue.setAttribute('class', 'disabled'),
+        //   (document.getElementById('clue_clicker').style.background = 'grey'),
+        //   (document.getElementById('clue_clicker').innerText = '');
+        // document.getElementById('song-info').style.display = 'block';
+        // renderSongInfo.classList.toggle('shakeSuccess');
+        // clueClicker.addEventListener('click', resetLyricle);
+      } else if (autoCorrectGuess !== songTitle && i <= 4) {
         click();
         setTimeout(function () {
           shake.classList.toggle('shake');
@@ -428,7 +624,11 @@ const Play = () => {
               ) : (
                 <>
                   {' '}
-                  <img src={fetchedSongInfo.song_art_image_url} alt="" />
+                  <img
+                    id="song-image"
+                    src={fetchedSongInfo.song_art_image_url}
+                    alt=""
+                  />
                 </>
               )}
             </div>
@@ -449,7 +649,7 @@ const Play = () => {
                 </>
               )}
             </div>
-            <Spotify wide link={spotifySongLink} />
+            {/* <Spotify wide link={spotifySongLink} /> */}
             <input
               type="text"
               id="guess_field"

@@ -91,9 +91,12 @@ font-size: 4vw;
 .song-info {
   // position: relative;
   display: none;
-  height: 1vh;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 15vh;
   z-index: 1;
   text-align: center;
+  transform: none;
 }
 
 .columns {
@@ -212,8 +215,8 @@ button.is-ghost:hover {
 
 #guesstext.shakeSuccess {
   position: relative;
-  // animation: shakeSuccess .3s ease-in-out;
-  // animation-iteration-count: 3;
+  animation: shakeSuccess .9s ease-in-out;
+  animation-iteration-count: 3;
   transition: 1s ease-in-out;
   transform:scale(1.6)
   
