@@ -14,7 +14,7 @@ const Play = () => {
   const [clue3, setClue3] = React.useState('?');
   const [clue2, setClue2] = React.useState('?');
   const [clue1, setClue1] = React.useState(
-    'Loading... You might have to refresh page'
+    '⌛️Loading... you might have to refresh page '
   );
   const [guess, setGuess] = React.useState('');
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
@@ -170,6 +170,9 @@ const Play = () => {
     i = -1;
     if (x == 2) {
       x = 4;
+    }
+    if (x == 9) {
+      document.getElementById('clue_clicker').innerText = 'NO MORE SONGS ';
     }
     document.getElementById('clue_clicker').innerText = 'getting lyrics';
     console.log('x is now=', x);
