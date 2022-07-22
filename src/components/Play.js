@@ -14,7 +14,7 @@ const Play = () => {
   const [clue3, setClue3] = React.useState('?');
   const [clue2, setClue2] = React.useState('?');
   const [clue1, setClue1] = React.useState(
-    '⌛️Loading... you might have to refresh page '
+    '⌛️Loading... you might have to refresh'
   );
   const [guess, setGuess] = React.useState('');
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
@@ -68,7 +68,8 @@ const Play = () => {
       console.log('SUCCESS', data2.data);
       setScrapedLyrics(data2.data);
       if (scrapedLyrics != '') {
-        setClue1(`Click 'Start Lyricle'`);
+        setClue1(`Tap 'More Lyrics?' to start! 🥳`);
+        document.getElementById('clue_clicker').innerText = 'more lyrics?';
       }
     } catch (err) {
       console.error(err);
