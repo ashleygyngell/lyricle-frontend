@@ -7,8 +7,10 @@ function Login() {
 
   const [user, setUser] = React.useState({
     email: '',
-    password: '',
+    password: ''
   });
+
+  const [errorMessage, updateErrorMessage] = React.useState('');
 
   function handleChange(event) {
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -23,7 +25,7 @@ function Login() {
         localStorage.setItem('accessToken', data.token);
         navigate('/');
       } catch (err) {
-        console.error(err);
+        updateErrorMessage(err.response.data.message);
       }
     };
     getData();
@@ -78,6 +80,7 @@ function Login() {
                   Log Me In!
                 </button>
               </div>
+              <small className="has-text-danger"> {errorMessage}</small>
             </form>
           </div>
         </div>

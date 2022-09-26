@@ -10,7 +10,14 @@ function Register() {
     email: '',
     password: '',
     password_confirmation: '',
-    image: '',
+    image: ''
+  });
+
+  const [errorMessage, updateErrorMessage] = React.useState({
+    username: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
   });
 
   function handleChange(event) {
@@ -25,10 +32,14 @@ function Register() {
         await registerUser(user);
         navigate('/login');
       } catch (err) {
-        console.error(err);
+        updateErrorMessage(err.response.data);
       }
     };
     getData();
+  }
+
+  function handleChangeForDropdown(event) {
+    setUser({ ...user, image: event.target.text });
   }
 
   return (
@@ -54,6 +65,7 @@ function Register() {
                 </span>
               </div>
             </div>
+            <small className="has-text-danger"> {errorMessage.username}</small>
             <div className="field">
               <label className="label">Email</label>
               <div className="control has-icons-left">
@@ -69,6 +81,8 @@ function Register() {
                 </span>
               </div>
             </div>
+            <small className="has-text-danger">{errorMessage.email}</small>
+
             <div className="field">
               <label className="label">Password</label>
               <div className="control has-icons-left">
@@ -85,6 +99,7 @@ function Register() {
                 </span>
               </div>
             </div>
+            <small className="has-text-danger">{errorMessage.password}</small>
             <div className="field">
               <label className="label">Password Confirmation</label>
               <div className="control has-icons-left">
@@ -101,21 +116,102 @@ function Register() {
                 </span>
               </div>
             </div>
-            <div className="field">
-              <label className="label">Emoji </label>
-              <div className="control has-icons-left">
-                <input
-                  className="input"
-                  placeholder=""
+            <div>
+              <small className="has-text-danger">
+                {errorMessage.password_confirmation}
+              </small>
+            </div>
+            <div class="select is-multiple is-fullwidt mb-3">
+              <label className="label ">Emoji </label>
+              <select multiple size="3">
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐶{' '}
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐱
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐭
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐰
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🦊
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐻
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐼
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
                   name="image"
                   onChange={handleChange}
                   value={user.image}
-                />
-                <span className="icon is-left">
-                  <i className="fas fa-horse-head"></i>
-                </span>
-              </div>
+                >
+                  🐨
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐯
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐮
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🐸
+                </option>
+                <option
+                  onClick={handleChangeForDropdown}
+                  name="image"
+                  value={user.image}
+                >
+                  🦉
+                </option>
+              </select>
             </div>
+
             <div className="field">
               <button type="submit" className="button is-fullwidth is-info">
                 Register Me!

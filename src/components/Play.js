@@ -21,7 +21,7 @@ const Play = () => {
   const [submittedGuess, setSubmittedGuess] = React.useState('');
   const [correctGuess, setCorrectGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('');
-  const [searchForArtist, setSearchForArtist] = React.useState('ABBA');
+  const [searchForArtist, setSearchForArtist] = React.useState('Nate Dogg');
   const [searchArtistURI, setSearchArtistURI] = React.useState('');
   const [fullSongInfo, setFullSongInfo] = React.useState('');
   const [fetchedSongInfo, setFetchedSongInfo] = React.useState('');
@@ -59,7 +59,7 @@ const Play = () => {
       console.log(
         'HEYHEYHEY',
         data.response.hits[x].result.primary_artist.name,
-        data.response.hits[x].result.title
+        data.response.hits
       );
       const data2 = await getLyricsFromAPI({
         song_title: data.response.hits[x].result.title,
