@@ -28,9 +28,9 @@ function JoinLeague() {
 
   return (
     <section className="hero is-fullheight-with-navbar is-success">
+      <div className="title has-text-centered">Join A League</div>
       <div className="section has-background-success">
         <div className="container">
-          <div className="title has-text-centered">Join A League</div>
           <div className="columns">
             <form
               className="box column is-half is-offset-one-quarter"

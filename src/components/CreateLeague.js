@@ -21,7 +21,7 @@ function CreateLeague() {
 
   const [leagueName, setLeagueName] = React.useState({
     league_name: '',
-    league_users: [],
+    league_users: []
   });
 
   function handleChange(event) {
@@ -39,7 +39,7 @@ function CreateLeague() {
       try {
         const { data } = await createLeague(leagueName);
         localStorage.setItem('accessToken', data.token);
-        // navigate('/');
+        navigate('/userleagues');
         console.log(leagueName);
       } catch (err) {
         console.error(err);

@@ -77,9 +77,12 @@ const Navbar = () => {
                   <button className="button is-info " onClick={logOut}>
                     Log Out
                   </button>
-                  <Link to={'/joinleague'} className="button is-info ">
-                    Join A League
-                  </Link>
+                  <button className="button is-info">
+                    <Link to={'/joinleague'}> Join a League</Link>
+                  </button>
+                  <button className="button is-info ">
+                    <Link to={'/createaleague'}> Create a League</Link>
+                  </button>
                 </>
               ) : (
                 <button className="button is-success" onClick={logIn}>

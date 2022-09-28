@@ -1,7 +1,9 @@
 import axios from 'axios';
 // import leagueId from './JoinLeague';
 
-const baseUrl = 'https://lyriclegamedb.herokuapp.com';
+// const baseUrl = 'https://lyriclegamedb.herokuapp.com';
+
+const baseUrl = 'http://127.0.0.1:8000';
 
 export const registerUser = (user) => {
   return axios.post(`${baseUrl}/authentication/register/`, user);
@@ -20,8 +22,8 @@ export const joinLeague = (leagueId) => {
   if (!accessToken) return false;
   return axios.put(`${baseUrl}/authentication/joinleague/1/`, leagueId, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+    }
   });
 };
 
@@ -51,7 +53,7 @@ export const getUserById = () => {
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
   return axios.get(`${baseUrl}/authentication/credentials/`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
   });
 };
 
@@ -60,7 +62,7 @@ export const getUserLeagues = () => {
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
   return axios.get(`${baseUrl}/leagues/`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
   });
 };
 
