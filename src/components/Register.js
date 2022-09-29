@@ -1,5 +1,5 @@
 import React from 'react';
-import { registerUser } from '../lib/api';
+import { loginUser, registerUser } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
@@ -20,17 +20,22 @@ function Register() {
     password_confirmation: ''
   });
 
+  const [loginData, updateLoginData] = React.useState({
+    email: '',
+    password: ''
+  });
+
   function handleChange(event) {
     setUser({ ...user, [event.target.name]: event.target.value });
+    updateLoginData({ email: user.email, password: user.password });
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-
     const getData = async () => {
       try {
         await registerUser(user);
-        navigate('/login');
+        navigate('/');
       } catch (err) {
         updateErrorMessage(err.response.data);
       }
