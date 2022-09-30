@@ -18,7 +18,6 @@ function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
-
     const getData = async () => {
       try {
         const { data } = await loginUser(user);

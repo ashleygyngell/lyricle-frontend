@@ -20,7 +20,7 @@ export const joinLeague = (leagueId) => {
   const accessToken = localStorage.getItem('accessToken');
   console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
-  return axios.put(`${baseUrl}/authentication/joinleague/1/`, leagueId, {
+  return axios.put(`${baseUrl}/authentication/joinleague/`, leagueId, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`
     }
@@ -28,10 +28,6 @@ export const joinLeague = (leagueId) => {
 };
 
 export const createLeague = (leagueName) => {
-  console.log(leagueName);
-  const accessToken = localStorage.getItem('accessToken');
-  console.log(`Bearer ${localStorage.getItem('accessToken')}`);
-  if (!accessToken) return false;
   return axios.post(`${baseUrl}/leagues/`, leagueName);
 };
 
@@ -42,18 +38,17 @@ export const createLeague = (leagueName) => {
 // };
 
 export const getLoggedInUserId = (user) => {
-  // const token = localStorage.getItem('token');
-  // if (!token) return false;
-  // const userObject = JSON.parse(window.atob(token.split('.')[1]));
-  // return userObject, user;
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  const userObject = JSON.parse(window.atob(token.split('.')[1]));
+  return userObject, user;
 };
 
 export const getUserById = () => {
   const accessToken = localStorage.getItem('accessToken');
-  console.log(`Bearer ${localStorage.getItem('accessToken')}`);
   if (!accessToken) return false;
   return axios.get(`${baseUrl}/authentication/credentials/`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+    headers: { Authorization: `Bearer ${accessToken}` }
   });
 };
 

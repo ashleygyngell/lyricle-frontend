@@ -16,7 +16,7 @@ const Home = () => {
                 width="90"
                 height="300"
               />
-              <a href="/play"></a>
+
               <p>Play Lyricle</p>
             </a>
             <br />

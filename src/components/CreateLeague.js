@@ -9,23 +9,27 @@ function CreateLeague() {
 
   React.useEffect(() => {
     const getData = async () => {
-      const user = await getUserById(getLoggedInUserId());
-      const userId = user.data.id;
-      setUser(userId);
-      console.log('test', userId);
+      try {
+        const userInfo = await getUserById();
+        setUser(userInfo.data.id);
+      } catch (err) {
+        console.log(err);
+      }
     };
     getData();
   }, []);
 
-  console.log('testuser', user);
-
   const [leagueName, setLeagueName] = React.useState({
     league_name: '',
-    league_users: []
+    league_users: [user]
   });
 
   function handleChange(event) {
-    setLeagueName({ ...leagueName, [event.target.name]: event.target.value });
+    setLeagueName({
+      ...leagueName,
+      league_name: event.target.value,
+      league_users: [user]
+    });
   }
 
   // THIS FIXES A STATE ISSUE. TEMPORARY FIX.
@@ -34,11 +38,11 @@ function CreateLeague() {
   }
 
   function handleSubmit(event) {
+    console.log('thisisthedata', leagueName);
     event.preventDefault();
     const getData = async () => {
       try {
         const { data } = await createLeague(leagueName);
-        localStorage.setItem('accessToken', data.token);
         navigate('/userleagues');
         console.log(leagueName);
       } catch (err) {
@@ -50,6 +54,7 @@ function CreateLeague() {
 
   return (
     <section className="hero is-fullheight-with-navbar is-success">
+      <div className="title has-text-centered">Create A League</div>
       <div className="section has-background-success">
         <div className="container">
           <div className="columns">
@@ -66,7 +71,7 @@ function CreateLeague() {
                     name="league_name"
                     onChange={handleChange}
                     value={leagueName.league_name}
-                    userId={user}
+                    userid={user}
                   />
                   <span className="icon is-left">
                     <i className="fa-solid fa-trophy fa-xl"></i>

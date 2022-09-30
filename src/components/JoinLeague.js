@@ -12,7 +12,7 @@ function JoinLeague() {
     const getData = async () => {
       try {
         const { data } = await joinLeague();
-        localStorage.setItem('accessToken', data.token);
+        localStorage.getItem('accessToken', data.token);
         navigate('/userprofile');
       } catch (err) {
         console.error(err);
