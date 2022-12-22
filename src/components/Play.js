@@ -14,7 +14,7 @@ const Play = () => {
   const [clue3, setClue3] = React.useState('?');
   const [clue2, setClue2] = React.useState('?');
   const [clue1, setClue1] = React.useState(
-    '⌛️Loading... you might have to refresh'
+    'Loading... you might have to refresh'
   );
   const [guess, setGuess] = React.useState('');
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
@@ -34,7 +34,7 @@ const Play = () => {
   const [artistName, setArtistName] = React.useState(null);
   const songInfo = {
     song_title: `${songTitle}`,
-    song_artist: `${artistName}`,
+    song_artist: `${artistName}`
   };
   let shake = document.getElementById('guesstext');
   let renderSongInfo = document.getElementById('song-info');
@@ -44,7 +44,7 @@ const Play = () => {
     try {
       const { data } = await getKendrick(searchForArtist).then(
         // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
-
+        console.log('Success', data),
         disabledValue.removeAttribute('disabled'),
         (document.getElementById('clue_clicker').style.background =
           'rgb(169, 169, 169)'),
@@ -63,7 +63,7 @@ const Play = () => {
       );
       const data2 = await getLyricsFromAPI({
         song_title: data.response.hits[x].result.title,
-        song_artist: data.response.hits[x].result.primary_artist.name,
+        song_artist: data.response.hits[x].result.primary_artist.name
       });
       console.log('SUCCESS', data2.data);
       setScrapedLyrics(data2.data);
@@ -194,7 +194,7 @@ const Play = () => {
       );
       const data2 = await getLyricsFromAPI({
         song_title: data.response.hits[x].result.title,
-        song_artist: data.response.hits[x].result.primary_artist.name,
+        song_artist: data.response.hits[x].result.primary_artist.name
       });
 
       console.log('SUCCESS', data2.data);
@@ -234,12 +234,12 @@ const Play = () => {
         type: 'multi',
         offset: '0',
         limit: '10',
-        numberOfTopResults: '5',
+        numberOfTopResults: '5'
       },
       headers: {
         'X-RapidAPI-Key': '6d722cd7d3msha3ef33382ba2326p13605ajsne131a1188a7b',
-        'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
-      },
+        'X-RapidAPI-Host': 'spotify81.p.rapidapi.com'
+      }
     };
 
     axios
@@ -272,12 +272,12 @@ const Play = () => {
       type: 'multi',
       offset: '0',
       limit: '10',
-      numberOfTopResults: '5',
+      numberOfTopResults: '5'
     },
     headers: {
       'X-RapidAPI-Key': '6d722cd7d3msha3ef33382ba2326p13605ajsne131a1188a7b',
-      'X-RapidAPI-Host': 'spotify81.p.rapidapi.com',
-    },
+      'X-RapidAPI-Host': 'spotify81.p.rapidapi.com'
+    }
   };
 
   const songSearchOptions = {
@@ -285,8 +285,8 @@ const Play = () => {
     url: `https://api.spotify.com/v1/search?q=track%3A${guess}%2Bartist%3A${artistName}&type=track&market=ES&limit=10&offset=0`,
     headers: {
       authorization:
-        'Bearer BQBgDky9r3CAsSBjqgGNOxewwjaRvxhZ7r9IniakNP28tpb8zc4xiFiZ78_s48ROrfLce_lEvqL14mhOirfJ0WEsnrl4LVg3thA3TqDShMhxZRmiJFTGcsyoO6pWmv2_JJsXDE-akXjdfVuWN4x3OjrLJNCrTpdjkg1TA7LU-8PT6w',
-    },
+        'Bearer BQBgDky9r3CAsSBjqgGNOxewwjaRvxhZ7r9IniakNP28tpb8zc4xiFiZ78_s48ROrfLce_lEvqL14mhOirfJ0WEsnrl4LVg3thA3TqDShMhxZRmiJFTGcsyoO6pWmv2_JJsXDE-akXjdfVuWN4x3OjrLJNCrTpdjkg1TA7LU-8PT6w'
+    }
   };
 
   function checkGuess() {
