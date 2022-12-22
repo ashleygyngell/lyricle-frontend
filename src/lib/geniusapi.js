@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 export const getKendrick = (searchForArtist) => {
-  return axios.get(`https://api.genius.com/search?q="${searchForArtist}"`, {
-    headers: {
-      Authorization: `Bearer ${process.env.client_access_token}`
-    }
-  });
+  return axios.get(
+    `http://api.genius.com/search?q="${searchForArtist}"&access_token=${process.env.client_access_token}`
+  );
 };

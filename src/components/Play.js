@@ -21,7 +21,7 @@ const Play = () => {
   const [submittedGuess, setSubmittedGuess] = React.useState('');
   const [correctGuess, setCorrectGuess] = React.useState('');
   const [countdown, setCountdown] = React.useState('');
-  const [searchForArtist, setSearchForArtist] = React.useState('Nate Dogg');
+  const [searchForArtist, setSearchForArtist] = React.useState('Harry styles');
   const [searchArtistURI, setSearchArtistURI] = React.useState('');
   const [fullSongInfo, setFullSongInfo] = React.useState('');
   const [fetchedSongInfo, setFetchedSongInfo] = React.useState('');
