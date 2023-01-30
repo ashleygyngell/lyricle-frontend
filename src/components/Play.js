@@ -1,6 +1,6 @@
 import React from 'react';
 import { getLyrics, getSong } from 'genius-lyrics-api';
-import { getKendrick } from '../lib/geniusapi';
+import { getKendrick, getPlaylistFromApi } from '../lib/geniusapi';
 import { getLyricsFromAPI } from '../lib/api.js';
 import axios from 'axios';
 import Spotify from 'react-spotify-embed';
@@ -13,9 +13,7 @@ const Play = () => {
   const [clue4, setClue4] = React.useState('?');
   const [clue3, setClue3] = React.useState('?');
   const [clue2, setClue2] = React.useState('?');
-  const [clue1, setClue1] = React.useState(
-    'Loading... you might have to refresh'
-  );
+  const [clue1, setClue1] = React.useState('...');
   const [guess, setGuess] = React.useState('');
   const [autoCorrectGuess, setAutoCorectGuess] = React.useState('');
   const [submittedGuess, setSubmittedGuess] = React.useState('');
@@ -28,6 +26,7 @@ const Play = () => {
   const [spotifySongLink, setSpotifySongLink] = React.useState(
     'https://open.spotify.com/track/'
   );
+  const [playlistInfo, setPlaylistInfo] = React.useState('');
 
   const [scrapedLyrics, setScrapedLyrics] = React.useState(null);
   const [songTitle, setSongTitle] = React.useState(null);
@@ -39,6 +38,57 @@ const Play = () => {
   let shake = document.getElementById('guesstext');
   let renderSongInfo = document.getElementById('song-info');
 
+  async function getPlaylistData() {
+    try {
+      const { data } = await getPlaylistFromApi().then(
+        console.log('gotPlaylistData')
+      );
+      setPlaylistInfo(data);
+
+      (songInfo.song_title = data.tracks.items[0].track.name),
+        (songInfo.song_artist = data.tracks.items[0].track.artists[0].name);
+      console.log(songInfo);
+    } catch (err) {
+      console.err(err);
+    }
+  }
+  // !! IF SEARCHING FOR ONE ARTIST UNCOMMENT
+  // async function getSongData() {
+  //   const disabledValue = document.getElementById('clue_clicker');
+  //   try {
+  //     const { data } = await getKendrick(searchForArtist).then(
+  //       // NEED TO DO A TERNARY HERE TO SAY IF NO DATA ETC
+  //       console.log('Success', data),
+  //       disabledValue.removeAttribute('disabled'),
+  //       (document.getElementById('clue_clicker').style.background =
+  //         'rgb(169, 169, 169)'),
+  //       (document.getElementById('clue_clicker').innerText = 'START LYRICLE')
+  //     );
+  //     setFetchedSongInfo(data.response.hits[x].result);
+  //     console.log('Song INFO', fetchedSongInfo);
+  //     setFullSongInfo(data.response.hits[x].result);
+  //     console.log(data.response);
+  //     setSongTitle(data.response.hits[x].result.title);
+  //     setArtistName(data.response.hits[x].result.artist_names);
+  //     console.log(
+  //       'HEYHEYHEY',
+  //       data.response.hits[x].result.primary_artist.name,
+  //       data.response.hits
+  //     );
+  //     const data2 = await getLyricsFromAPI({
+  //       song_title: data.response.hits[x].result.title,
+  //       song_artist: data.response.hits[x].result.primary_artist.name
+  //     });
+  //     console.log('SUCCESS', data2.data);
+  //     setScrapedLyrics(data2.data);
+  //     if (scrapedLyrics != '') {
+  //       setClue1(`Tap 'More Lyrics?' to start! 🥳`);
+  //       document.getElementById('clue_clicker').innerText = 'more lyrics?';
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
   async function getSongData() {
     const disabledValue = document.getElementById('clue_clicker');
     try {
@@ -50,12 +100,9 @@ const Play = () => {
           'rgb(169, 169, 169)'),
         (document.getElementById('clue_clicker').innerText = 'START LYRICLE')
       );
-      setFetchedSongInfo(data.response.hits[x].result);
-      console.log('Song INFO', fetchedSongInfo);
-      setFullSongInfo(data.response.hits[x].result);
-      console.log(data.response);
-      setSongTitle(data.response.hits[x].result.title);
-      setArtistName(data.response.hits[x].result.artist_names);
+
+      setSongTitle(songInfo.song_title);
+      setArtistName(songInfo.song_artist);
       console.log(
         'HEYHEYHEY',
         data.response.hits[x].result.primary_artist.name,
@@ -76,6 +123,8 @@ const Play = () => {
     }
   }
 
+  const clueClicker = document.getElementById('clue_clicker');
+
   React.useEffect(() => {
     document.getElementById('clue_clicker').disabled = 'disabled';
     document.getElementById('giveup_clicker').disabled = 'disabled';
@@ -83,6 +132,7 @@ const Play = () => {
     document.getElementById('clue_clicker').style.background = 'grey';
     document.getElementById('clue_clicker').innerText = 'loading lyricle';
 
+    getPlaylistData();
     getSongData();
 
     // getData()
@@ -101,11 +151,7 @@ const Play = () => {
       }
       setCountdown(hours + ':' + min + ':' + sec);
     }, 1000);
-  }, []);
 
-  const clueClicker = document.getElementById('clue_clicker');
-
-  React.useEffect(() => {
     if (autoCorrectGuess == songTitle || guess == songTitle) {
       clueClicker.addEventListener('click', resetLyricle);
       document.getElementById('clue_clicker').innerText = 'next song';

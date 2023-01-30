@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import leagueId from './JoinLeague';
 
-const baseUrl = 'https://lyriclegamedb.herokuapp.com';
+const baseUrl = 'https://lyricle-post-heroku.fly.dev';
 
 // const baseUrl = 'http://127.0.0.1:8000';
 
